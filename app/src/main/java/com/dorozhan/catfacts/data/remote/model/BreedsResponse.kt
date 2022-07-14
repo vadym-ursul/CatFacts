@@ -1,5 +1,6 @@
-package com.dorozhan.catfacts.model
+package com.dorozhan.catfacts.data.remote.model
 
+import com.dorozhan.catfacts.domain.model.Breed
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

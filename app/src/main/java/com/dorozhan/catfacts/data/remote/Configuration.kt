@@ -1,4 +1,4 @@
-package com.dorozhan.catfacts.data.network
+package com.dorozhan.catfacts.data.remote
 
 const val CATFACT_NINJA_URL = "https://catfact.ninja/"
 const val IMAGES_URL = "https://api-ninjas.com/images/cats/"

@@ -2,8 +2,9 @@ package com.dorozhan.catfacts.data.repository.paged
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.dorozhan.catfacts.data.remote.ApiResponse
 import com.dorozhan.catfacts.data.repository.CatsRepository
-import com.dorozhan.catfacts.model.Breed
+import com.dorozhan.catfacts.domain.model.Breed
 
 class BreedSource(
     private val catsRepository: CatsRepository
@@ -12,14 +13,18 @@ class BreedSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Breed> {
         return try {
             val nextPage = params.key ?: 1
-            val response = catsRepository.getBreeds(nextPage)
-
-            val list = response.data
-            LoadResult.Page(
-                data = list.map { it.toBreed() },
-                prevKey = if (nextPage == 1) null else nextPage - 1,
-                nextKey = if (response.nextPageURL == null) null else response.currentPage.plus(1)
-            )
+            when (val response = catsRepository.getBreeds(nextPage)) {
+                is ApiResponse.Error -> LoadResult.Error(Throwable("Api Error"))
+                is ApiResponse.Success -> {
+                    val body = response.body
+                    val list = body.data
+                    LoadResult.Page(
+                        data = list.map { it.toBreed() },
+                        prevKey = if (nextPage == 1) null else nextPage - 1,
+                        nextKey = if (body.nextPageURL == null) null else body.currentPage.plus(1)
+                    )
+                }
+            }
         } catch (e: Exception) {
             LoadResult.Error(e)
         }

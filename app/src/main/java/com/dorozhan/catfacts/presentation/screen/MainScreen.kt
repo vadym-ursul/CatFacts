@@ -1,4 +1,4 @@
-package com.dorozhan.catfacts.ui.screen
+package com.dorozhan.catfacts.presentation.screen
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -23,11 +23,11 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import coil.compose.AsyncImage
 import com.dorozhan.catfacts.R
-import com.dorozhan.catfacts.model.Breed
-import com.dorozhan.catfacts.ui.state.ErrorItem
-import com.dorozhan.catfacts.ui.state.ErrorView
-import com.dorozhan.catfacts.ui.state.LoadingItem
-import com.dorozhan.catfacts.ui.state.LoadingView
+import com.dorozhan.catfacts.domain.model.Breed
+import com.dorozhan.catfacts.presentation.state.ErrorItem
+import com.dorozhan.catfacts.presentation.state.ErrorView
+import com.dorozhan.catfacts.presentation.state.LoadingItem
+import com.dorozhan.catfacts.presentation.state.LoadingView
 import kotlinx.coroutines.flow.Flow
 
 @Composable

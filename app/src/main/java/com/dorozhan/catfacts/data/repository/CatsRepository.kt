@@ -1,11 +1,16 @@
 package com.dorozhan.catfacts.data.repository
 
-import com.dorozhan.catfacts.data.network.retrofit.Api
-import com.dorozhan.catfacts.data.network.ktor.Api as KtorApi
+import com.dorozhan.catfacts.data.remote.retrofit.Api
+import com.dorozhan.catfacts.di.IoDispatcher
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class CatsRepository(
+class CatsRepository @Inject constructor(
     private val api: Api,
-    private val ktorApi: KtorApi,
+    @IoDispatcher private val defaultDispatcher: CoroutineDispatcher
 ) {
-    suspend fun getBreeds(pageNumber: Int) = ktorApi.getBreeds(pageNumber)
+
+    suspend fun getBreeds(pageNumber: Int) =
+        withContext(defaultDispatcher) { api.getBreeds(pageNumber) }
 }

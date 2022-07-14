@@ -1,15 +1,22 @@
 package com.dorozhan.catfacts.di
 
-import com.dorozhan.catfacts.data.network.retrofit.Api
-import com.dorozhan.catfacts.data.network.ktor.Api as KtorApi
+import com.dorozhan.catfacts.data.remote.retrofit.Api
 import com.dorozhan.catfacts.data.repository.CatsRepository
-import org.koin.dsl.module
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
 
-val repositoryModule = module {
-    single { createRepository(get(), get()) }
+@Module
+@InstallIn(SingletonComponent::class)
+class RepositoryModule {
+
+    @Provides
+    fun provideCatsRepository(
+        api: Api,
+        @IoDispatcher defaultDispatcher: CoroutineDispatcher
+    ): CatsRepository {
+        return CatsRepository(api, defaultDispatcher)
+    }
 }
-
-fun createRepository(
-    api: Api,
-    ktorApi: KtorApi
-): CatsRepository = CatsRepository(api, ktorApi)

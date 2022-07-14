@@ -1,4 +1,4 @@
-package com.dorozhan.catfacts.ui.theme
+package com.dorozhan.catfacts.presentation.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Shapes

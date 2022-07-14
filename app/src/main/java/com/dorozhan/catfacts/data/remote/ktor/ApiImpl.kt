@@ -1,9 +1,9 @@
-package com.dorozhan.catfacts.data.network.ktor
+package com.dorozhan.catfacts.data.remote.ktor
 
-import com.dorozhan.catfacts.data.network.BREEDS
-import com.dorozhan.catfacts.data.network.CATFACT_NINJA_URL
-import com.dorozhan.catfacts.data.network.PAGE
-import com.dorozhan.catfacts.model.BreedsResponse
+import com.dorozhan.catfacts.data.remote.BREEDS
+import com.dorozhan.catfacts.data.remote.CATFACT_NINJA_URL
+import com.dorozhan.catfacts.data.remote.PAGE
+import com.dorozhan.catfacts.data.remote.model.BreedsResponse
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*

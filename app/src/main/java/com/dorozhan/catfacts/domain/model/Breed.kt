@@ -1,8 +1,8 @@
-package com.dorozhan.catfacts.model
+package com.dorozhan.catfacts.domain.model
 
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toLowerCase
-import com.dorozhan.catfacts.data.network.IMAGES_URL
+import com.dorozhan.catfacts.data.remote.IMAGES_URL
 
 data class Breed(
     val title: String
