@@ -9,7 +9,7 @@ import com.dorozhan.catfacts.data.repository.paged.BreedSource
 import com.dorozhan.catfacts.model.Breed
 import kotlinx.coroutines.flow.Flow
 
-class MainViewModel(
+class BreedsViewModel(
     catsRepository: CatsRepository
 ) : ViewModel() {
 

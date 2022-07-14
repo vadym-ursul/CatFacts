@@ -31,7 +31,7 @@ import com.dorozhan.catfacts.ui.state.LoadingView
 import kotlinx.coroutines.flow.Flow
 
 @Composable
-fun MainScreen(mainViewModel: MainViewModel) {
+fun MainScreen(breedsViewModel: BreedsViewModel) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -39,7 +39,7 @@ fun MainScreen(mainViewModel: MainViewModel) {
             )
         },
         content = {
-            List(breeds = mainViewModel.breeds)
+            List(breeds = breedsViewModel.breeds)
         }
     )
 }

@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">CatFacts</string>
     <string name="breeds">Breeds</string>
+    <string name="facts">Facts</string>
 
     <!--  actions  -->
     <string name="reload">Reload</string>
