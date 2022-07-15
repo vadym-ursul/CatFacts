@@ -116,5 +116,5 @@ fun BreedItem(breed: Breed) {
 @Composable
 @Preview
 fun BreedItemPreview() {
-    BreedItem(breed = Breed("Persian"))
+    BreedItem(breed = Breed("Persian", imageUrl = ""))
 }
