@@ -1,9 +1,11 @@
 package com.dorozhan.catfacts.di
 
+import com.dorozhan.catfacts.BuildConfig
 import com.dorozhan.catfacts.data.remote.CATFACT_NINJA_URL
 import com.dorozhan.catfacts.data.remote.TIMEOUT
 import com.dorozhan.catfacts.data.remote.retrofit.Api
 import com.dorozhan.catfacts.data.remote.retrofit.adapter.ApiResponseAdapterFactory
+import com.dorozhan.catfacts.data.remote.retrofit.interceptor.CurlLoggingInterceptor
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -31,7 +33,10 @@ class NetworkModule {
     }
 
     @Provides
-    fun provideOkHttpClient(@BaseUrl baseUrl: String): OkHttpClient {
+    fun provideOkHttpClient(
+        @BaseUrl baseUrl: String,
+        curlLoggingInterceptor: CurlLoggingInterceptor
+    ): OkHttpClient {
         return OkHttpClient.Builder().apply {
             connectTimeout(TIMEOUT, TimeUnit.MILLISECONDS)
             readTimeout(TIMEOUT, TimeUnit.MILLISECONDS)
@@ -46,6 +51,9 @@ class NetworkModule {
                     .url(newUrl)
                     .build()
                 chain.proceed(newRequest)
+            }
+            if (BuildConfig.DEBUG) {
+                addInterceptor(curlLoggingInterceptor)
             }
         }.build()
     }

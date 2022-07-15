@@ -1,15 +1,14 @@
 package com.dorozhan.catfacts.domain.model
 
-import androidx.compose.ui.text.intl.Locale
-import androidx.compose.ui.text.toLowerCase
-import com.dorozhan.catfacts.data.remote.IMAGES_URL
+import com.dorozhan.catfacts.data.local.model.BreedDto
 
 data class Breed(
-    val title: String
+    val title: String,
+    val imageUrl: String,
+    val isFavourite: Boolean = false
 ) {
-    val imageUrl = "$IMAGES_URL${
-        title
-            .toLowerCase(Locale.current)
-            .replace(" ", "_")
-    }.jpg"
+
+    fun toDto(): BreedDto {
+        return BreedDto(id = title, imageUrl = imageUrl, isFavourite = isFavourite)
+    }
 }

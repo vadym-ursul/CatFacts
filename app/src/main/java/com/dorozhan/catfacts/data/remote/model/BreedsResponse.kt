@@ -1,5 +1,8 @@
 package com.dorozhan.catfacts.data.remote.model
 
+import androidx.compose.ui.text.intl.Locale
+import androidx.compose.ui.text.toLowerCase
+import com.dorozhan.catfacts.data.remote.IMAGES_URL
 import com.dorozhan.catfacts.domain.model.Breed
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -36,8 +39,16 @@ data class Datum(
     val coat: String,
     val pattern: String
 ) {
+
     fun toBreed(): Breed {
-        return Breed(title = breed)
+        return Breed(
+            title = breed,
+            imageUrl = "$IMAGES_URL${
+                breed
+                    .toLowerCase(Locale.current)
+                    .replace(" ", "_")
+            }.jpg"
+        )
     }
 }
 
