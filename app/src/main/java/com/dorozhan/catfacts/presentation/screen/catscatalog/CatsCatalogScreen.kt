@@ -1,12 +1,12 @@
-package com.dorozhan.catfacts.presentation.screen
+package com.dorozhan.catfacts.presentation.screen.catscatalog
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,6 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -24,33 +25,54 @@ import androidx.paging.compose.items
 import coil.compose.AsyncImage
 import com.dorozhan.catfacts.R
 import com.dorozhan.catfacts.domain.model.Breed
+import com.dorozhan.catfacts.presentation.screen.catdetails.CatDetailsNavArgs
+import com.dorozhan.catfacts.presentation.screen.destinations.CatDetailsScreenDestination
 import com.dorozhan.catfacts.presentation.state.ErrorItem
 import com.dorozhan.catfacts.presentation.state.ErrorView
 import com.dorozhan.catfacts.presentation.state.LoadingItem
 import com.dorozhan.catfacts.presentation.state.LoadingView
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootNavGraph
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.flow.Flow
 
+@RootNavGraph(start = true)
+@Destination
 @Composable
-fun MainScreen(mainViewModel: MainViewModel) {
+fun CatsCatalogScreen(
+    navigator: DestinationsNavigator,
+    catsCatalogViewModel: CatsCatalogViewModel = hiltViewModel(),
+) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = stringResource(id = R.string.breeds)) }
+                title = { Text(text = stringResource(id = R.string.breeds)) },
+                actions = {
+                    IconButton(onClick = { }) {
+                        Icon(imageVector = Icons.Rounded.Search, contentDescription = "Search")
+                    }
+                }
             )
         },
         content = {
-            List(breeds = mainViewModel.breeds)
+            List(breeds = catsCatalogViewModel.breeds,
+                onBreedItemClick = {
+                    navigator.navigate(CatDetailsScreenDestination(breedName = it.title))
+                })
         }
     )
 }
 
 @Composable
-fun List(breeds: Flow<PagingData<Breed>>) {
+private fun List(
+    breeds: Flow<PagingData<Breed>>,
+    onBreedItemClick: (Breed) -> Unit = {},
+) {
     val lazyItems = breeds.collectAsLazyPagingItems()
 
     LazyColumn {
         items(lazyItems) { movie ->
-            movie?.let { BreedItem(breed = it) }
+            movie?.let { BreedItem(breed = it, onBreedItemClick = onBreedItemClick) }
         }
         lazyItems.apply {
             when {
@@ -83,11 +105,15 @@ fun List(breeds: Flow<PagingData<Breed>>) {
 }
 
 @Composable
-fun BreedItem(breed: Breed) {
+private fun BreedItem(
+    breed: Breed,
+    onBreedItemClick: (Breed) -> Unit = {},
+) {
     Row(
         modifier = Modifier
             .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .clickable { onBreedItemClick(breed) },
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -115,6 +141,6 @@ fun BreedItem(breed: Breed) {
 
 @Composable
 @Preview
-fun BreedItemPreview() {
+private fun BreedItemPreview() {
     BreedItem(breed = Breed("Persian", imageUrl = ""))
 }

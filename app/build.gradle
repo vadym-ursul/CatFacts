@@ -4,6 +4,7 @@ plugins {
     id 'org.jetbrains.kotlin.plugin.serialization'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
+    id 'com.google.devtools.ksp' version '1.6.10-1.0.4'
 }
 
 android {
@@ -47,6 +48,13 @@ android {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
+    applicationVariants.all { variant ->
+        kotlin.sourceSets {
+            getByName(variant.name) {
+                kotlin.srcDir("build/generated/ksp/${variant.name}/kotlin")
+            }
+        }
+    }
 }
 
 dependencies {
@@ -63,6 +71,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.0'
     implementation "androidx.activity:activity-compose:1.5.0"
     implementation "androidx.compose.compiler:compiler:$compose_compiler_version"
+    implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
 
     // Paging Compose
     implementation "androidx.paging:paging-compose:1.0.0-alpha15"
@@ -88,6 +97,7 @@ dependencies {
 
     // Hilt
     implementation "com.google.dagger:hilt-android:$hilt_version"
+    implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
 
     // Image Loading
@@ -101,6 +111,10 @@ dependencies {
     implementation "androidx.room:room-ktx:$room_version"
     implementation "androidx.room:room-paging:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
+
+    // Compose Destinations
+    implementation 'io.github.raamcosta.compose-destinations:core:1.5.13-beta'
+    ksp 'io.github.raamcosta.compose-destinations:ksp:1.5.13-beta'
 
     // Tests
     testImplementation 'junit:junit:4.13.2'

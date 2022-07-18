@@ -10,6 +10,7 @@ import com.dorozhan.catfacts.domain.model.Breed
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class BreedsRepository @Inject constructor(
@@ -28,6 +29,12 @@ class BreedsRepository @Inject constructor(
             pagingSourceFactory = pagingSourceFactory,
         ).flow.map { pagingData ->
             pagingData.map { breedDto -> breedDto.toBreed() }
+        }
+    }
+
+    suspend fun getBreedByName(name: String): Breed {
+        return withContext(defaultDispatcher) {
+           breedDao.findByName(name).toBreed()
         }
     }
 }
