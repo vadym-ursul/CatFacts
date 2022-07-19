@@ -21,7 +21,10 @@ class BreedsMediator @Inject constructor(
     private val breedDao = db.breedDao()
     private val breedRemoteKeysDao = db.breedRemoteKeysDao()
 
-    override suspend fun load(loadType: LoadType, state: PagingState<Int, BreedDto>): MediatorResult {
+    override suspend fun load(
+        loadType: LoadType,
+        state: PagingState<Int, BreedDto>
+    ): MediatorResult {
         return try {
             val page = when (loadType) {
                 LoadType.REFRESH -> {
@@ -30,18 +33,16 @@ class BreedsMediator @Inject constructor(
                 }
                 LoadType.PREPEND -> {
                     val remoteKeys = getRemoteKeyForFirstItem(state)
-                    val prevPage = remoteKeys?.prevPage
-                        ?: return MediatorResult.Success(
-                            endOfPaginationReached = remoteKeys != null
-                        )
+                    val prevPage = remoteKeys?.prevPage ?: return MediatorResult.Success(
+                        endOfPaginationReached = remoteKeys != null
+                    )
                     prevPage
                 }
                 LoadType.APPEND -> {
                     val remoteKeys = getRemoteKeyForLastItem(state)
-                    val nextPage = remoteKeys?.nextPage
-                        ?: return MediatorResult.Success(
-                            endOfPaginationReached = remoteKeys != null
-                        )
+                    val nextPage = remoteKeys?.nextPage ?: return MediatorResult.Success(
+                        endOfPaginationReached = remoteKeys != null
+                    )
                     nextPage
                 }
             }

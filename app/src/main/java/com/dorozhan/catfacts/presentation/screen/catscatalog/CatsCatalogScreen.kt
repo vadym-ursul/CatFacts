@@ -25,12 +25,13 @@ import androidx.paging.compose.items
 import coil.compose.AsyncImage
 import com.dorozhan.catfacts.R
 import com.dorozhan.catfacts.domain.model.Breed
-import com.dorozhan.catfacts.presentation.screen.catdetails.CatDetailsNavArgs
 import com.dorozhan.catfacts.presentation.screen.destinations.CatDetailsScreenDestination
+import com.dorozhan.catfacts.presentation.screen.destinations.SearchScreenDestination
 import com.dorozhan.catfacts.presentation.state.ErrorItem
 import com.dorozhan.catfacts.presentation.state.ErrorView
 import com.dorozhan.catfacts.presentation.state.LoadingItem
 import com.dorozhan.catfacts.presentation.state.LoadingView
+import com.dorozhan.catfacts.presentation.util.rememberLazyListState
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -48,17 +49,23 @@ fun CatsCatalogScreen(
             TopAppBar(
                 title = { Text(text = stringResource(id = R.string.breeds)) },
                 actions = {
-                    IconButton(onClick = { }) {
+                    IconButton(
+                        onClick = {
+                            navigator.navigate(SearchScreenDestination())
+                        }
+                    ) {
                         Icon(imageVector = Icons.Rounded.Search, contentDescription = "Search")
                     }
                 }
             )
         },
         content = {
-            List(breeds = catsCatalogViewModel.breeds,
+            List(
+                breeds = catsCatalogViewModel.breedsFlow,
                 onBreedItemClick = {
                     navigator.navigate(CatDetailsScreenDestination(breedName = it.title))
-                })
+                }
+            )
         }
     )
 }
@@ -70,7 +77,7 @@ private fun List(
 ) {
     val lazyItems = breeds.collectAsLazyPagingItems()
 
-    LazyColumn {
+    LazyColumn(state = lazyItems.rememberLazyListState()) {
         items(lazyItems) { movie ->
             movie?.let { BreedItem(breed = it, onBreedItemClick = onBreedItemClick) }
         }
