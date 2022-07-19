@@ -14,7 +14,7 @@ interface BreedDao {
     fun loadAllByIds(userIds: IntArray): List<BreedDto>
 
     @Query("SELECT * FROM breeds WHERE id LIKE :first LIMIT 1")
-    fun findByName(first: String): BreedDto
+    suspend fun findByName(first: String): BreedDto
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addBreeds(breeds: List<BreedDto>)
