@@ -3,6 +3,7 @@ package com.dorozhan.catfacts.presentation.screen.catscatalog
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -19,7 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
-import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import coil.compose.AsyncImage
@@ -32,17 +33,19 @@ import com.dorozhan.catfacts.presentation.state.ErrorView
 import com.dorozhan.catfacts.presentation.state.LoadingItem
 import com.dorozhan.catfacts.presentation.state.LoadingView
 import com.dorozhan.catfacts.presentation.util.rememberLazyListState
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import kotlinx.coroutines.flow.Flow
 
 @RootNavGraph(start = true)
 @Destination
 @Composable
 fun CatsCatalogScreen(
     navigator: DestinationsNavigator,
-    catsCatalogViewModel: CatsCatalogViewModel = hiltViewModel(),
+    catalogViewModel: CatalogViewModel = hiltViewModel(),
 ) {
     Scaffold(
         topBar = {
@@ -60,28 +63,47 @@ fun CatsCatalogScreen(
             )
         },
         content = {
-            List(
-                breeds = catsCatalogViewModel.breedsFlow,
-                onBreedItemClick = {
-                    navigator.navigate(CatDetailsScreenDestination(breedName = it.title))
-                }
+            val items = catalogViewModel.breedsFlow.collectAsLazyPagingItems()
+            val listState = items.rememberLazyListState()
+            val swipeState = rememberSwipeRefreshState(
+                isRefreshing = items.loadState.refresh is LoadState.Loading,
             )
+            SwipeRefresh(
+                modifier = Modifier.fillMaxSize(),
+                state = swipeState,
+                onRefresh = { items.refresh() },
+                indicator = { state, trigger ->
+                    SwipeRefreshIndicator(
+                        state = state,
+                        refreshTriggerDistance = trigger,
+                        scale = true,
+                        contentColor = MaterialTheme.colors.primary
+                    )
+                }
+            ) {
+                List(
+                    state = listState,
+                    items = items,
+                    onBreedItemClick = {
+                        navigator.navigate(CatDetailsScreenDestination(breedName = it.title))
+                    }
+                )
+            }
         }
     )
 }
 
 @Composable
 private fun List(
-    breeds: Flow<PagingData<Breed>>,
+    state: LazyListState,
+    items: LazyPagingItems<Breed>,
     onBreedItemClick: (Breed) -> Unit = {},
 ) {
-    val lazyItems = breeds.collectAsLazyPagingItems()
-
-    LazyColumn(state = lazyItems.rememberLazyListState()) {
-        items(lazyItems) { movie ->
+    LazyColumn(state = state) {
+        items(items) { movie ->
             movie?.let { BreedItem(breed = it, onBreedItemClick = onBreedItemClick) }
         }
-        lazyItems.apply {
+        items.apply {
             when {
                 loadState.refresh is LoadState.Loading -> {
                     item { LoadingView(modifier = Modifier.fillParentMaxSize()) }
@@ -91,7 +113,7 @@ private fun List(
                 }
                 loadState.refresh is LoadState.Error -> {
                     // todo: handle error with using text
-                    val e = lazyItems.loadState.refresh as LoadState.Error
+                    val e = items.loadState.refresh as LoadState.Error
                     item {
                         ErrorView(
                             modifier = Modifier.fillParentMaxSize(),

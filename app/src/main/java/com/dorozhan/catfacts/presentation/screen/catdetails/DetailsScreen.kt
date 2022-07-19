@@ -21,13 +21,13 @@ import com.dorozhan.catfacts.R
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
-@Destination(navArgsDelegate = CatDetailsNavArgs::class)
+@Destination(navArgsDelegate = DetailsNavArgs::class)
 @Composable
 fun CatDetailsScreen(
-    catDetailsViewModel: CatDetailsViewModel = hiltViewModel(),
+    detailsViewModel: DetailsViewModel = hiltViewModel(),
     navigator: DestinationsNavigator,
 ) {
-    val breedState = catDetailsViewModel.breedLiveData.observeAsState()
+    val breedState = detailsViewModel.breedLiveData.observeAsState()
     Scaffold(
         topBar = {
             TopAppBar(

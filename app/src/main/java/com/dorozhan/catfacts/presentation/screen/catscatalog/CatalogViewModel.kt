@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 @HiltViewModel
-class CatsCatalogViewModel @Inject constructor(
+class CatalogViewModel @Inject constructor(
     breedsRepository: BreedsRepository
 ) : ViewModel() {
 

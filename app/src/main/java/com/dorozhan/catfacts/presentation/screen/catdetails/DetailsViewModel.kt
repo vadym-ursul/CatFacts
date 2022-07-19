@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CatDetailsViewModel @Inject constructor(
+class DetailsViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val breedsRepository: BreedsRepository,
 ) : ViewModel() {
@@ -24,7 +24,7 @@ class CatDetailsViewModel @Inject constructor(
     private fun getBreed() {
         viewModelScope.launch {
             _breedLiveData.value =
-                breedsRepository.getBreedByName(savedStateHandle.navArgs<CatDetailsNavArgs>().breedName)
+                breedsRepository.getBreedByName(savedStateHandle.navArgs<DetailsNavArgs>().breedName)
         }
     }
 }
