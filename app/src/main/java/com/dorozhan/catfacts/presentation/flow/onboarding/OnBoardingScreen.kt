@@ -1,4 +1,4 @@
-package com.dorozhan.catfacts.presentation.screen.onboarding
+package com.dorozhan.catfacts.presentation.flow.onboarding
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -16,8 +16,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.dorozhan.catfacts.R
-import com.dorozhan.catfacts.presentation.screen.destinations.CatsCatalogScreenDestination
+import com.dorozhan.catfacts.presentation.flow.destinations.CatsCatalogScreenDestination
 import com.google.accompanist.pager.*
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -34,6 +35,7 @@ fun OnBoardingScreen(
         OnBoardingPage.Third
     )
     val pagerState = rememberPagerState()
+    val onBoardingViewModel = hiltViewModel<OnBoardingViewModel>()
 
     Column(modifier = Modifier.fillMaxSize()) {
         HorizontalPager(
@@ -54,6 +56,7 @@ fun OnBoardingScreen(
             modifier = Modifier.weight(1f),
             pagerState = pagerState
         ) {
+            onBoardingViewModel.finishOnboard()
             navigator.popBackStack()
             navigator.navigate(CatsCatalogScreenDestination)
         }

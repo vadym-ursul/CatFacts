@@ -1,8 +1,10 @@
 package com.dorozhan.catfacts.di
 
+import com.dorozhan.catfacts.data.local.Storage
 import com.dorozhan.catfacts.data.local.db.BreedDao
 import com.dorozhan.catfacts.data.remote.retrofit.Api
 import com.dorozhan.catfacts.data.repository.BreedsRepository
+import com.dorozhan.catfacts.data.repository.OnboardRepository
 import com.dorozhan.catfacts.data.repository.paged.BreedsMediator
 import dagger.Module
 import dagger.Provides
@@ -22,5 +24,12 @@ class RepositoryModule {
         @IoDispatcher defaultDispatcher: CoroutineDispatcher
     ): BreedsRepository {
         return BreedsRepository(api, breedDao, breedsMediator, defaultDispatcher)
+    }
+
+    @Provides
+    fun provideOnboardRepository(
+        storage: Storage,
+    ): OnboardRepository {
+        return OnboardRepository(storage)
     }
 }

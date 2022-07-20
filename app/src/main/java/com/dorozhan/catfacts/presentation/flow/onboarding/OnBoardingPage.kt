@@ -1,4 +1,4 @@
-package com.dorozhan.catfacts.presentation.screen.onboarding
+package com.dorozhan.catfacts.presentation.flow.onboarding
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes

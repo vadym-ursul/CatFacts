@@ -1,4 +1,4 @@
-package com.dorozhan.catfacts.presentation.screen.search
+package com.dorozhan.catfacts.presentation.flow.search
 
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
