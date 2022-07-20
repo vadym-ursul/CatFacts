@@ -22,7 +22,7 @@ class BreedsRepository @Inject constructor(
 
     @OptIn(ExperimentalPagingApi::class)
     fun getBreeds(): Flow<PagingData<Breed>> {
-        val pagingSourceFactory: () -> PagingSource<Int, BreedDto> = { breedDao.getAllBreeds() }
+        val pagingSourceFactory: () -> PagingSource<Int, BreedDto> = { breedDao.getBreedsPaged() }
         return Pager(
             config = PagingConfig(pageSize = 15, prefetchDistance = 0),
             remoteMediator = breedsMediator,
@@ -34,7 +34,13 @@ class BreedsRepository @Inject constructor(
 
     suspend fun getBreedByName(name: String): Breed {
         return withContext(defaultDispatcher) {
-           breedDao.findByName(name).toBreed()
+            breedDao.findById(name).toBreed()
+        }
+    }
+
+    suspend fun setFavorite(breed: Breed, favorite: Boolean) {
+        return withContext(defaultDispatcher) {
+            breedDao.updateBreed(breed.copy(favorite = favorite).toDto())
         }
     }
 }

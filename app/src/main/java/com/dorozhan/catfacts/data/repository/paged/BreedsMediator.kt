@@ -22,7 +22,11 @@ class BreedsMediator @Inject constructor(
     private val breedRemoteKeysDao = db.breedRemoteKeysDao()
 
     override suspend fun initialize(): InitializeAction {
-        return InitializeAction.SKIP_INITIAL_REFRESH
+        return if (breedDao.getBreedsCount() > 0) {
+            InitializeAction.SKIP_INITIAL_REFRESH
+        } else {
+            InitializeAction.LAUNCH_INITIAL_REFRESH
+        }
     }
 
     override suspend fun load(
