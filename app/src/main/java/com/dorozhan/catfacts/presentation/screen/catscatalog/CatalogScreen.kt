@@ -7,11 +7,14 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -66,7 +69,7 @@ fun CatsCatalogScreen(
             val items = catalogViewModel.breedsFlow.collectAsLazyPagingItems()
             val listState = items.rememberLazyListState()
             val swipeState = rememberSwipeRefreshState(
-                isRefreshing = items.loadState.refresh is LoadState.Loading,
+                isRefreshing = items.loadState.refresh is LoadState.Loading && items.itemCount > 0,
             )
             SwipeRefresh(
                 modifier = Modifier.fillMaxSize(),
@@ -86,6 +89,9 @@ fun CatsCatalogScreen(
                     items = items,
                     onBreedItemClick = {
                         navigator.navigate(CatDetailsScreenDestination(breedName = it.title))
+                    },
+                    onFavoriteClick = { breed, checked ->
+                        catalogViewModel.onFavoriteClicked(breed, checked)
                     }
                 )
             }
@@ -98,14 +104,21 @@ private fun List(
     state: LazyListState,
     items: LazyPagingItems<Breed>,
     onBreedItemClick: (Breed) -> Unit = {},
+    onFavoriteClick: (Breed, Boolean) -> Unit = { _, _ -> }
 ) {
     LazyColumn(state = state) {
         items(items) { movie ->
-            movie?.let { BreedItem(breed = it, onBreedItemClick = onBreedItemClick) }
+            movie?.let {
+                BreedItem(
+                    breed = it,
+                    onBreedItemClick = onBreedItemClick,
+                    onFavoriteClick = onFavoriteClick
+                )
+            }
         }
         items.apply {
             when {
-                loadState.refresh is LoadState.Loading -> {
+                loadState.refresh is LoadState.Loading && items.itemCount <= 0 -> {
                     item { LoadingView(modifier = Modifier.fillParentMaxSize()) }
                 }
                 loadState.append is LoadState.Loading -> {
@@ -137,6 +150,7 @@ private fun List(
 private fun BreedItem(
     breed: Breed,
     onBreedItemClick: (Breed) -> Unit = {},
+    onFavoriteClick: (Breed, Boolean) -> Unit = { _, _ -> }
 ) {
     Row(
         modifier = Modifier
@@ -153,19 +167,64 @@ private fun BreedItem(
             style = MaterialTheme.typography.h6,
             overflow = TextOverflow.Ellipsis
         )
-        // todo: replace placeholder image with cat image
-        AsyncImage(
-            model = breed.imageUrl,
-            contentDescription = null,
-            modifier = Modifier
+        Box(
+            Modifier
                 .padding(start = 16.dp)
-                .size(60.dp)
-                .clip(RoundedCornerShape(4.dp)),
-            contentScale = ContentScale.Crop,
-            placeholder = painterResource(id = R.drawable.ic_cat_placeholder_512),
-            error = painterResource(id = R.drawable.ic_cat_placeholder_512),
+                .size(100.dp)
+        ) {
+            AsyncImage(
+                model = breed.imageUrl,
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clip(RoundedCornerShape(4.dp)),
+                contentScale = ContentScale.Crop,
+                placeholder = painterResource(id = R.drawable.ic_cat_placeholder_512),
+                error = painterResource(id = R.drawable.ic_cat_placeholder_512),
+            )
+            FavoriteButton(
+                modifier = Modifier.align(Alignment.TopEnd),
+                checked = breed.favorite,
+                onCheckedChange = { onFavoriteClick(breed, it) }
+            )
+        }
+    }
+}
+
+@Composable
+fun FavoriteButton(
+    modifier: Modifier = Modifier,
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+    color: Color = MaterialTheme.colors.primary
+) {
+    IconToggleButton(
+        checked = checked,
+        onCheckedChange = {
+            onCheckedChange.invoke(it)
+        },
+        modifier = modifier
+    ) {
+        Icon(
+            tint = color,
+            imageVector = if (checked) {
+                Icons.Filled.Favorite
+            } else {
+                Icons.Default.FavoriteBorder
+            },
+            contentDescription = null
         )
     }
+
+}
+
+@Composable
+@Preview
+private fun FavoriteButtonPreview() {
+    FavoriteButton(
+        checked = true,
+        onCheckedChange = {}
+    )
 }
 
 @Composable

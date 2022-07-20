@@ -9,10 +9,10 @@ import com.dorozhan.catfacts.domain.model.Breed
 class BreedDto(
     @PrimaryKey val id: String,
     @ColumnInfo(name = "imageUrl") val imageUrl: String,
-    @ColumnInfo(name = "isFavourite") val isFavourite: Boolean,
+    @ColumnInfo(name = "favorite") val favorite: Boolean,
 ) {
 
     fun toBreed(): Breed {
-        return Breed(title = id, imageUrl = imageUrl, isFavourite = isFavourite)
+        return Breed(title = id, imageUrl = imageUrl, favorite = favorite)
     }
 }
