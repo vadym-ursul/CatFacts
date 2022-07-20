@@ -4,4 +4,12 @@
 
     <!--  actions  -->
     <string name="reload">Reload</string>
+
+    <string name="onboarding_first_page_title">Catalog</string>
+    <string name="onboarding_second_page_title">Details</string>
+    <string name="onboarding_third_page_title">Search</string>
+    <string name="onboarding_first_page_description">Browse the catalog of cats and choose your favorite!</string>
+    <string name="onboarding_second_page_description">By clicking on a cat from the catalog, you can view images in full screen.</string>
+    <string name="onboarding_third_page_description">Look for the cats you are interested on the search screen.</string>
+    <string name="go_catalog">Go to the catalog</string>
 </resources>

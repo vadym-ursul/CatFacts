@@ -14,3 +14,6 @@
 - [Serialization](https://github.com/Kotlin/kotlinx.serialization)
 - [Coil](https://github.com/chrisbanes/accompanist/blob/main/coil/README.md)
 - [Material Components for Android](https://github.com/material-components/material-components-android) 
+- [Accompanist](https://github.com/google/accompanist)
+- [Compose Destinations](https://github.com/raamcosta/compose-destinations)
+- [Splash Screen](https://developer.android.com/guide/topics/ui/splash-screen)
