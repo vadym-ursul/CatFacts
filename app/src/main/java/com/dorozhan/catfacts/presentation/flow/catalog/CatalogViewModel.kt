@@ -1,4 +1,4 @@
-package com.dorozhan.catfacts.presentation.flow.catscatalog
+package com.dorozhan.catfacts.presentation.flow.catalog
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

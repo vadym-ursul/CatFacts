@@ -1,4 +1,4 @@
-package com.dorozhan.catfacts.presentation.flow.catscatalog
+package com.dorozhan.catfacts.presentation.flow.catalog
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
