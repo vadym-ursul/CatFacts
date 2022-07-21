@@ -23,6 +23,7 @@ class StorageModule {
     }
 
     @Provides
+    @Singleton
     fun provideSharedPreferences(@ApplicationContext context: Context): SharedPreferences {
         val keyGenParameterSpec = MasterKeys.AES256_GCM_SPEC
         val mainKeyAlias = MasterKeys.getOrCreate(keyGenParameterSpec)

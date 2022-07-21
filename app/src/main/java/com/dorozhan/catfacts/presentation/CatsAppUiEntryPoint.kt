@@ -1,21 +1,23 @@
 package com.dorozhan.catfacts.presentation
 
 import androidx.compose.runtime.Composable
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.dorozhan.catfacts.presentation.screen.NavGraphs
-import com.dorozhan.catfacts.presentation.screen.destinations.OnBoardingScreenDestination
+import androidx.compose.runtime.livedata.observeAsState
+import com.dorozhan.catfacts.presentation.flow.NavGraphs
+import com.dorozhan.catfacts.presentation.flow.destinations.OnBoardingScreenDestination
+import com.dorozhan.catfacts.presentation.flow.splash.SplashViewModel
 import com.ramcosta.composedestinations.DestinationsNavHost
 
 @Composable
-fun CatsAppUiEntryPoint() {
-    val mainViewModel = hiltViewModel<MainViewModel>()
-    val startRoute =
-        if (mainViewModel.isFirstTimeLaunch) {
-            mainViewModel.isFirstTimeLaunch = false
-            OnBoardingScreenDestination
-        } else NavGraphs.root.startRoute
+fun CatsAppUiEntryPoint(mainViewModel: SplashViewModel) {
+    val onboardPassed = mainViewModel.onboardPassedLiveData.observeAsState(null).value
+    onboardPassed?.let {
+        val startRoute = if (it) {
+            NavGraphs.root.startRoute
+        } else OnBoardingScreenDestination
 
-    DestinationsNavHost(
-        navGraph = NavGraphs.root,
-        startRoute = startRoute)
+        DestinationsNavHost(
+            navGraph = NavGraphs.root,
+            startRoute = startRoute
+        )
+    }
 }

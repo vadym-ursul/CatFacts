@@ -1,4 +1,4 @@
-package com.dorozhan.catfacts.presentation.screen.catdetails
+package com.dorozhan.catfacts.presentation.flow.catdetails
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize

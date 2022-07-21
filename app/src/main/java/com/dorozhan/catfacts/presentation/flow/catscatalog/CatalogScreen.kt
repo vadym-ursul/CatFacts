@@ -1,4 +1,4 @@
-package com.dorozhan.catfacts.presentation.screen.catscatalog
+package com.dorozhan.catfacts.presentation.flow.catscatalog
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -29,8 +29,8 @@ import androidx.paging.compose.items
 import coil.compose.AsyncImage
 import com.dorozhan.catfacts.R
 import com.dorozhan.catfacts.domain.model.Breed
-import com.dorozhan.catfacts.presentation.screen.destinations.CatDetailsScreenDestination
-import com.dorozhan.catfacts.presentation.screen.destinations.SearchScreenDestination
+import com.dorozhan.catfacts.presentation.flow.destinations.CatDetailsScreenDestination
+import com.dorozhan.catfacts.presentation.flow.destinations.SearchScreenDestination
 import com.dorozhan.catfacts.presentation.state.ErrorItem
 import com.dorozhan.catfacts.presentation.state.ErrorView
 import com.dorozhan.catfacts.presentation.state.LoadingItem

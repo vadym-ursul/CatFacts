@@ -1,9 +1,9 @@
-package com.dorozhan.catfacts.presentation.screen.catdetails
+package com.dorozhan.catfacts.presentation.flow.catdetails
 
 import androidx.lifecycle.*
 import com.dorozhan.catfacts.data.repository.BreedsRepository
 import com.dorozhan.catfacts.domain.model.Breed
-import com.dorozhan.catfacts.presentation.screen.navArgs
+import com.dorozhan.catfacts.presentation.flow.navArgs
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
