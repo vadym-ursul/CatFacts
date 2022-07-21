@@ -9,7 +9,6 @@ import com.ramcosta.composedestinations.DestinationsNavHost
 
 @Composable
 fun CatsAppUiEntryPoint(mainViewModel: SplashViewModel) {
-//    val mainViewModel = hiltViewModel<MainViewModel>()
     val onboardPassed = mainViewModel.onboardPassedLiveData.observeAsState(null).value
     onboardPassed?.let {
         val startRoute = if (it) {
