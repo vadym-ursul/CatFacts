@@ -10,6 +10,9 @@ interface BreedDao {
     @Query("SELECT * FROM breeds")
     fun getBreedsPaged(): PagingSource<Int, BreedDto>
 
+    @Query("SELECT * FROM breeds WHERE id LIKE '%' || :text || '%'")
+    fun getFilteredBreedsPaged(text: String): PagingSource<Int, BreedDto>
+
     @Query("SELECT COUNT(id) FROM breeds")
     suspend fun getBreedsCount(): Int
 

@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
+@OptIn(ExperimentalPagingApi::class)
 class BreedsRepository @Inject constructor(
     private val api: Api,
     private val breedDao: BreedDao,
@@ -20,16 +21,16 @@ class BreedsRepository @Inject constructor(
     @IoDispatcher private val defaultDispatcher: CoroutineDispatcher
 ) {
 
-    @OptIn(ExperimentalPagingApi::class)
+    private val pagingConfig = PagingConfig(pageSize = 15, prefetchDistance = 0)
+
     fun getBreeds(): Flow<PagingData<Breed>> {
         val pagingSourceFactory: () -> PagingSource<Int, BreedDto> = { breedDao.getBreedsPaged() }
-        return Pager(
-            config = PagingConfig(pageSize = 15, prefetchDistance = 0),
+        val pager = Pager(
+            config = pagingConfig,
             remoteMediator = breedsMediator,
             pagingSourceFactory = pagingSourceFactory,
-        ).flow.map { pagingData ->
-            pagingData.map { breedDto -> breedDto.toBreed() }
-        }
+        )
+        return getBreedsFlow(pager)
     }
 
     suspend fun getBreedByName(name: String): Breed {
@@ -41,6 +42,24 @@ class BreedsRepository @Inject constructor(
     suspend fun setFavorite(breed: Breed, favorite: Boolean) {
         return withContext(defaultDispatcher) {
             breedDao.updateBreed(breed.copy(favorite = favorite).toDto())
+        }
+    }
+
+    fun filterBreeds(text: String): Flow<PagingData<Breed>> {
+        val pagingSourceFactory: () -> PagingSource<Int, BreedDto> =
+            { breedDao.getFilteredBreedsPaged(text) }
+        val pager = Pager(
+            config = pagingConfig,
+            pagingSourceFactory = pagingSourceFactory,
+        )
+        return getBreedsFlow(pager)
+    }
+
+    private fun getBreedsFlow(
+        pager: Pager<Int, BreedDto>
+    ): Flow<PagingData<Breed>> {
+        return pager.flow.map { pagingData ->
+            pagingData.map { breedDto -> breedDto.toBreed() }
         }
     }
 }
