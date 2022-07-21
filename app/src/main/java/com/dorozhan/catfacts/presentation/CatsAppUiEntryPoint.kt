@@ -10,13 +10,15 @@ import com.ramcosta.composedestinations.DestinationsNavHost
 @Composable
 fun CatsAppUiEntryPoint(mainViewModel: SplashViewModel) {
 //    val mainViewModel = hiltViewModel<MainViewModel>()
-    val onboardPassed = mainViewModel.onboardPassedLiveData.observeAsState(false).value
-    val startRoute = if (onboardPassed) {
-        NavGraphs.root.startRoute
-    } else OnBoardingScreenDestination
+    val onboardPassed = mainViewModel.onboardPassedLiveData.observeAsState(null).value
+    onboardPassed?.let {
+        val startRoute = if (it) {
+            NavGraphs.root.startRoute
+        } else OnBoardingScreenDestination
 
-    DestinationsNavHost(
-        navGraph = NavGraphs.root,
-        startRoute = startRoute
-    )
+        DestinationsNavHost(
+            navGraph = NavGraphs.root,
+            startRoute = startRoute
+        )
+    }
 }

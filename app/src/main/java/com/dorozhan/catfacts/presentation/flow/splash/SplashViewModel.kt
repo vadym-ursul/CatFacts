@@ -15,7 +15,7 @@ class SplashViewModel @Inject constructor(
     private val _isLoading: MutableLiveData<Boolean> = MutableLiveData(true)
     val isLoading: LiveData<Boolean> = _isLoading
     private val _onboardPassedLiveData = MutableLiveData<Boolean>()
-    val onboardPassedLiveData: LiveData<Boolean> = _onboardPassedLiveData
+    val onboardPassedLiveData: LiveData<Boolean?> = _onboardPassedLiveData
 
     init {
         _onboardPassedLiveData.value = onboardRepository.isOnBoardPassed
