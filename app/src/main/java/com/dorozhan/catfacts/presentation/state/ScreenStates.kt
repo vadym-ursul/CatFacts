@@ -92,7 +92,7 @@ fun RetryImage(
     modifier: Modifier,
     onClick: () -> Unit
 ) {
-    IconButton(onClick = { onClick.invoke() }) {
+    IconButton(onClick = onClick) {
         Icon(
             painter = painterResource(id = R.drawable.ic_baseline_refresh_24),
             contentDescription = stringResource(id = R.string.reload)

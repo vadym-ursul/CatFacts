@@ -65,9 +65,7 @@ fun CatalogAppBar(
         title = { Text(text = title) },
         actions = {
             IconButton(
-                onClick = {
-                    onClick.invoke()
-                }
+                onClick = onClick
             ) {
                 Icon(imageVector = Icons.Rounded.Search, contentDescription = "Search")
             }
@@ -88,9 +86,7 @@ fun SearchAppBar(
             BaseTitleContentProvider {
                 NoPaddingTextField(
                     value = text,
-                    onValueChange = {
-                        onTextChange(it)
-                    },
+                    onValueChange = onTextChange,
                     modifier = Modifier
                         .fillMaxWidth(),
                     placeholder = {
