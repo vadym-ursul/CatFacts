@@ -1,7 +1,8 @@
-package com.dorozhan.catfacts.presentation.flow.catdetails
+package com.dorozhan.catfacts.presentation.flow.details
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -39,8 +40,13 @@ fun CatDetailsScreen(
                 title = { Text(text = breedState.value?.title ?: "") }
             )
         },
-        content = {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        content = { padding ->
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding),
+                contentAlignment = Alignment.Center
+            ) {
                 AsyncImage(
                     model = breedState.value?.imageUrl,
                     contentDescription = null,
