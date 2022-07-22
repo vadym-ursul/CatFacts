@@ -20,6 +20,7 @@ fun SearchScreen(
     navigator: DestinationsNavigator,
     searchViewModel: SearchViewModel = hiltViewModel(),
 ) {
+    val searchFirstState = searchViewModel.isFirstSearchDoneLiveData.observeAsState()
     Scaffold(
         topBar = {
             SearchAppBar(
@@ -37,17 +38,19 @@ fun SearchScreen(
             val items = searchViewModel.breedsFlow.collectAsLazyPagingItems()
             val listState = items.rememberLazyListState()
 
-            BreedsLazyColumn(
-                modifier = Modifier.padding(padding),
-                state = listState,
-                items = items,
-                onBreedItemClick = {
-                    navigator.navigate(CatDetailsScreenDestination(breedName = it.title))
-                },
-                onFavoriteClick = { breed, checked ->
-                    searchViewModel.onFavoriteClicked(breed, checked)
-                }
-            )
+            if (searchFirstState.value != null) {
+                BreedsLazyColumn(
+                    modifier = Modifier.padding(padding),
+                    state = listState,
+                    items = items,
+                    onBreedItemClick = {
+                        navigator.navigate(CatDetailsScreenDestination(breedName = it.title))
+                    },
+                    onFavoriteClick = { breed, checked ->
+                        searchViewModel.onFavoriteClicked(breed, checked)
+                    }
+                )
+            }
         }
     )
 }

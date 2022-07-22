@@ -17,6 +17,8 @@ class SearchViewModel @Inject constructor(
     private val breedsRepository: BreedsRepository
 ) : ViewModel() {
 
+    private val _isFirstSearchDoneLiveData = MutableLiveData<Boolean>()
+    val isFirstSearchDoneLiveData: LiveData<Boolean> = _isFirstSearchDoneLiveData
     private val _searchTextLiveData = MutableLiveData<String>()
     val searchTextLiveData: LiveData<String> = _searchTextLiveData
     private val _searchActionLiveData = MutableLiveData<String>()
@@ -34,6 +36,7 @@ class SearchViewModel @Inject constructor(
     }
 
     fun onSearchClicked() {
+        _isFirstSearchDoneLiveData.value = true
         val text: String = searchTextLiveData.value ?: ""
         _searchActionLiveData.value = text
     }
