@@ -4,6 +4,7 @@
 
     <!--  actions  -->
     <string name="reload">Reload</string>
+    <string name="search">Search</string>
 
     <string name="onboarding_first_page_title">Catalog</string>
     <string name="onboarding_second_page_title">Details</string>

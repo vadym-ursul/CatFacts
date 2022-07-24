@@ -5,6 +5,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -14,6 +18,8 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.dorozhan.catfacts.R
 import com.dorozhan.catfacts.presentation.flow.destinations.CatDetailsScreenDestination
+import com.dorozhan.catfacts.presentation.flow.destinations.SearchScreenDestination
+import com.dorozhan.catfacts.presentation.library.BreedsLazyColumn
 import com.dorozhan.catfacts.presentation.flow.destinations.FavoritesScreenDestination
 import com.dorozhan.catfacts.presentation.flow.destinations.SearchScreenDestination
 import com.dorozhan.catfacts.presentation.library.BreedItem
@@ -57,14 +63,16 @@ fun CatalogScreen(
                 }
             )
         },
-        content = {
+        content = { padding ->
             val items = catalogViewModel.breedsFlow.collectAsLazyPagingItems()
             val listState = items.rememberLazyListState()
             val swipeState = rememberSwipeRefreshState(
                 isRefreshing = items.loadState.refresh is LoadState.Loading && items.itemCount > 0,
             )
             SwipeRefresh(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding),
                 state = swipeState,
                 onRefresh = { items.refresh() },
                 indicator = { state, trigger ->
