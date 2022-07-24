@@ -12,4 +12,6 @@
     <string name="onboarding_second_page_description">By clicking on a cat from the catalog, you can view images in full screen.</string>
     <string name="onboarding_third_page_description">Look for the cats you are interested on the search screen.</string>
     <string name="go_catalog">Go to the catalog</string>
+    <string name="favorites">Favorites</string>
+    <string name="empty_list">Sorry, nothing to show :(</string>
 </resources>
