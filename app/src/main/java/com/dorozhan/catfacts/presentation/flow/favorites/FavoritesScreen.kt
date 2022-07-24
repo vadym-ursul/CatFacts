@@ -13,6 +13,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.dorozhan.catfacts.R
 import com.dorozhan.catfacts.presentation.flow.destinations.CatDetailsScreenDestination
+import com.dorozhan.catfacts.presentation.library.BackAppBar
 import com.dorozhan.catfacts.presentation.library.BreedItem
 import com.dorozhan.catfacts.presentation.library.PagingList
 import com.dorozhan.catfacts.presentation.util.rememberLazyListState
@@ -28,14 +29,9 @@ fun FavoritesScreen(
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(
-                navigationIcon = {
-                    IconButton(onClick = { navigator.navigateUp() }) {
-                        Icon(imageVector = Icons.Rounded.ArrowBack, contentDescription = "Back")
-                    }
-                },
-                title = { Text(text = stringResource(id = R.string.favorites)) }
-            )
+            BackAppBar(
+                text = stringResource(id = R.string.favorites),
+                onBackClick = { navigator.navigateUp() })
         },
         content = {
             val items = favoritesViewModel.favoriteBreedsFlow.collectAsLazyPagingItems()

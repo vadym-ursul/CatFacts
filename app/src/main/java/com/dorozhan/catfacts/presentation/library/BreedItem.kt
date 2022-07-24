@@ -71,41 +71,6 @@ fun BreedItem(
 }
 
 @Composable
-private fun FavoriteButton(
-    modifier: Modifier = Modifier,
-    checked: Boolean,
-    onCheckedChange: (Boolean) -> Unit,
-    color: Color = MaterialTheme.colors.primary,
-) {
-    IconToggleButton(
-        checked = checked,
-        onCheckedChange = {
-            onCheckedChange.invoke(it)
-        },
-        modifier = modifier
-    ) {
-        Icon(
-            tint = color,
-            imageVector = if (checked) {
-                Icons.Filled.Favorite
-            } else {
-                Icons.Default.FavoriteBorder
-            },
-            contentDescription = null
-        )
-    }
-}
-
-@Composable
-@Preview(showBackground = true)
-private fun FavoriteButtonPreview() {
-    FavoriteButton(
-        checked = true,
-        onCheckedChange = {}
-    )
-}
-
-@Composable
 @Preview(showBackground = true)
 private fun BreedItemPreview() {
     BreedItem(breed = Breed("Persian", imageUrl = ""))

@@ -35,12 +35,11 @@ class BreedsRepository @Inject constructor(
 
     fun getFavoriteBreeds(): Flow<PagingData<Breed>> {
         val pagingSourceFactory: () -> PagingSource<Int, BreedDto> = { breedDao.findByFavorite() }
-        return Pager(
-            config = PagingConfig(pageSize = 15, prefetchDistance = 0),
+        val pager = Pager(
+            config = pagingConfig,
             pagingSourceFactory = pagingSourceFactory,
-        ).flow.map { pagingData ->
-            pagingData.map { breedDto -> breedDto.toBreed() }
-        }
+        )
+        return getBreedsFlow(pager)
     }
 
     suspend fun getBreedByName(name: String): Breed {

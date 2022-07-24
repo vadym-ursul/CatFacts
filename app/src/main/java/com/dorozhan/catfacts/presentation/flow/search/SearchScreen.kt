@@ -8,7 +8,8 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.dorozhan.catfacts.presentation.flow.destinations.CatDetailsScreenDestination
-import com.dorozhan.catfacts.presentation.library.BreedsLazyColumn
+import com.dorozhan.catfacts.presentation.library.BreedItem
+import com.dorozhan.catfacts.presentation.library.PagingList
 import com.dorozhan.catfacts.presentation.library.SearchAppBar
 import com.dorozhan.catfacts.presentation.util.rememberLazyListState
 import com.ramcosta.composedestinations.annotation.Destination
@@ -39,17 +40,21 @@ fun SearchScreen(
             val listState = items.rememberLazyListState()
 
             if (searchFirstState.value != null) {
-                BreedsLazyColumn(
+                PagingList(
                     modifier = Modifier.padding(padding),
                     state = listState,
                     items = items,
-                    onBreedItemClick = {
-                        navigator.navigate(CatDetailsScreenDestination(breedName = it.title))
-                    },
-                    onFavoriteClick = { breed, checked ->
-                        searchViewModel.onFavoriteClicked(breed, checked)
-                    }
-                )
+                    itemContent = { item ->
+                        BreedItem(
+                            breed = item,
+                            onItemClick = {
+                                navigator.navigate(CatDetailsScreenDestination(breedName = it.title))
+                            },
+                            onFavoriteClick = { breed, checked ->
+                                searchViewModel.onFavoriteClicked(breed, checked)
+                            }
+                        )
+                    })
             }
         }
     )
