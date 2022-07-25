@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -14,10 +15,10 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.dorozhan.catfacts.R
 import com.dorozhan.catfacts.presentation.flow.destinations.CatDetailsScreenDestination
 import com.dorozhan.catfacts.presentation.flow.destinations.FavoritesScreenDestination
-import com.dorozhan.catfacts.presentation.flow.destinations.SearchScreenDestination
 import com.dorozhan.catfacts.presentation.library.BreedItem
 import com.dorozhan.catfacts.presentation.library.CatalogAppBar
 import com.dorozhan.catfacts.presentation.library.PagingList
+import com.dorozhan.catfacts.presentation.library.SearchAppBar
 import com.dorozhan.catfacts.presentation.util.rememberLazyListState
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
@@ -34,11 +35,25 @@ fun CatalogScreen(
     navigator: DestinationsNavigator,
     catalogViewModel: CatalogViewModel = hiltViewModel(),
 ) {
+    val showSearchBar = catalogViewModel.showSearchBarLiveData.observeAsState(false).value
     Scaffold(
         topBar = {
-            CatalogAppBar(title = stringResource(id = R.string.breeds),
-                onSearchClick = { navigator.navigate(SearchScreenDestination()) },
-                onFavoritesClick = { navigator.navigate(FavoritesScreenDestination) })
+            if (!showSearchBar) {
+                CatalogAppBar(title = stringResource(id = R.string.breeds),
+                    onSearchClick = { catalogViewModel.showSearchBar() },
+                    onFavoritesClick = { navigator.navigate(FavoritesScreenDestination) })
+            } else {
+                SearchAppBar(
+                    text = catalogViewModel.searchTextLiveData.observeAsState("").value,
+                    onBackClick = { catalogViewModel.hideSearchBar() },
+                    onTextChange = {
+                        catalogViewModel.searchTextUpdated(it)
+                    },
+                    onSearchClick = {
+                        catalogViewModel.search()
+                    }
+                )
+            }
         },
         content = { padding ->
             val items = catalogViewModel.breedsFlow.collectAsLazyPagingItems()

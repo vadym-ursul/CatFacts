@@ -1,5 +1,6 @@
 package com.dorozhan.catfacts.presentation.library
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardActions
@@ -12,7 +13,11 @@ import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -86,10 +91,23 @@ fun CatalogAppBar(
 fun SearchAppBar(
     text: String,
     textPlaceholder: String = stringResource(id = R.string.search),
-    onBackClick: () -> Unit,
-    onTextChange: (String) -> Unit,
-    onSearchClick: (String) -> Unit,
+    onBackClick: () -> Unit = {},
+    onTextChange: (String) -> Unit = {},
+    onSearchClick: (String) -> Unit = {},
 ) {
+    val onBackClickListener: () -> Unit = {
+        onTextChange("")
+        onBackClick()
+    }
+
+    val focusRequester = remember { FocusRequester() }
+
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+    }
+
+    BackHandler(onBack = onBackClickListener)
+
     BackAppBar(
         title = {
             BaseTitleContentProvider {
@@ -97,11 +115,12 @@ fun SearchAppBar(
                     value = text,
                     onValueChange = onTextChange,
                     modifier = Modifier
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .focusRequester(focusRequester),
                     placeholder = {
                         Text(
                             text = textPlaceholder,
-                            color = MaterialTheme.colors.surface,
+                            color = MaterialTheme.colors.surface.copy(alpha = ContentAlpha.medium),
                             style = MaterialTheme.typography.h6
                         )
                     },
@@ -122,13 +141,11 @@ fun SearchAppBar(
             }
 
         },
-        onBackClick = { onBackClick() },
+        onBackClick = onBackClickListener,
         actions = {
             if (text.isNotEmpty()) {
                 IconButton(
-                    onClick = {
-                        onTextChange("")
-                    }
+                    onClick = { onTextChange("") }
                 ) {
                     Icon(
                         imageVector = Icons.Default.Close,
