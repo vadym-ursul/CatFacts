@@ -7,6 +7,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.runtime.Composable
@@ -17,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import com.dorozhan.catfacts.R
+import com.dorozhan.catfacts.presentation.flow.destinations.FavoritesScreenDestination
 
 @Composable
 private fun BaseTitleContentProvider(
@@ -59,15 +61,22 @@ fun BackAppBar(
 @Composable
 fun CatalogAppBar(
     title: String,
-    onClick: () -> Unit
+    onSearchClick: () -> Unit = {},
+    onFavoritesClick: () -> Unit = {}
 ) {
     TopAppBar(
         title = { Text(text = title) },
         actions = {
             IconButton(
-                onClick = onClick
+                onClick = onSearchClick
             ) {
                 Icon(imageVector = Icons.Rounded.Search, contentDescription = "Search")
+            }
+            IconButton(
+                onClick = onFavoritesClick
+            ) {
+                Icon(imageVector = Icons.Default.FavoriteBorder,
+                    contentDescription = "Favorites")
             }
         }
     )

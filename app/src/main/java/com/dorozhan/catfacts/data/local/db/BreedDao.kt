@@ -16,6 +16,9 @@ interface BreedDao {
     @Query("SELECT COUNT(id) FROM breeds")
     suspend fun getBreedsCount(): Int
 
+    @Query("SELECT * FROM breeds WHERE favorite=:favorite")
+    fun findByFavorite(favorite: Boolean = true): PagingSource<Int, BreedDto>
+
     @Query("SELECT * FROM breeds WHERE id=:id")
     suspend fun findById(id: String): BreedDto
 

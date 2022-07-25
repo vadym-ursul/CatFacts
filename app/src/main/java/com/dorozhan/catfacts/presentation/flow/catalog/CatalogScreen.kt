@@ -1,10 +1,10 @@
 package com.dorozhan.catfacts.presentation.flow.catalog
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -13,8 +13,11 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.dorozhan.catfacts.R
 import com.dorozhan.catfacts.presentation.flow.destinations.CatDetailsScreenDestination
+import com.dorozhan.catfacts.presentation.flow.destinations.FavoritesScreenDestination
 import com.dorozhan.catfacts.presentation.flow.destinations.SearchScreenDestination
-import com.dorozhan.catfacts.presentation.library.BreedsLazyColumn
+import com.dorozhan.catfacts.presentation.library.BreedItem
+import com.dorozhan.catfacts.presentation.library.CatalogAppBar
+import com.dorozhan.catfacts.presentation.library.PagingList
 import com.dorozhan.catfacts.presentation.util.rememberLazyListState
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
@@ -23,27 +26,19 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @RootNavGraph(start = true)
 @Destination
 @Composable
-fun CatsCatalogScreen(
+fun CatalogScreen(
     navigator: DestinationsNavigator,
     catalogViewModel: CatalogViewModel = hiltViewModel(),
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text(text = stringResource(id = R.string.breeds)) },
-                actions = {
-                    IconButton(
-                        onClick = {
-                            navigator.navigate(SearchScreenDestination())
-                        }
-                    ) {
-                        Icon(imageVector = Icons.Rounded.Search, contentDescription = "Search")
-                    }
-                }
-            )
+            CatalogAppBar(title = stringResource(id = R.string.breeds),
+                onSearchClick = { navigator.navigate(SearchScreenDestination()) },
+                onFavoritesClick = { navigator.navigate(FavoritesScreenDestination) })
         },
         content = { padding ->
             val items = catalogViewModel.breedsFlow.collectAsLazyPagingItems()
@@ -66,16 +61,20 @@ fun CatsCatalogScreen(
                     )
                 }
             ) {
-                BreedsLazyColumn(
+                PagingList(
                     state = listState,
                     items = items,
-                    onBreedItemClick = {
-                        navigator.navigate(CatDetailsScreenDestination(breedName = it.title))
-                    },
-                    onFavoriteClick = { breed, checked ->
-                        catalogViewModel.onFavoriteClicked(breed, checked)
-                    }
-                )
+                    itemContent = { item ->
+                        BreedItem(
+                            breed = item,
+                            onItemClick = {
+                                navigator.navigate(CatDetailsScreenDestination(breedName = it.title))
+                            },
+                            onFavoriteClick = { breed, checked ->
+                                catalogViewModel.onFavoriteClicked(breed, checked)
+                            }
+                        )
+                    })
             }
         }
     )

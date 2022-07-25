@@ -1,9 +1,7 @@
 package com.dorozhan.catfacts.presentation.state
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,7 +13,7 @@ import com.dorozhan.catfacts.R
 
 @Composable
 fun LoadingView(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier,
@@ -27,15 +25,9 @@ fun LoadingView(
 }
 
 @Composable
-@Preview
-fun LoadingViewPreview() {
-    LoadingView()
-}
-
-@Composable
 fun ErrorView(
     modifier: Modifier = Modifier,
-    onClickRetry: () -> Unit
+    onClickRetry: () -> Unit,
 ) {
     Column(
         modifier = modifier,
@@ -50,12 +42,6 @@ fun ErrorView(
 }
 
 @Composable
-@Preview
-fun ErrorViewPreview() {
-    ErrorView {}
-}
-
-@Composable
 fun LoadingItem() {
     CircularProgressIndicator(
         modifier = Modifier
@@ -67,16 +53,24 @@ fun LoadingItem() {
     )
 }
 
-
 @Composable
-@Preview
-fun LoadingItemPreview() {
-    LoadingItem()
+fun EmptyItemView(
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = stringResource(id = R.string.empty_list),
+            style = MaterialTheme.typography.body2)
+    }
 }
 
 @Composable
 fun ErrorItem(
-    onClickRetry: () -> Unit
+    onClickRetry: () -> Unit,
 ) {
     RetryImage(
         modifier = Modifier
@@ -90,7 +84,7 @@ fun ErrorItem(
 @Composable
 fun RetryImage(
     modifier: Modifier,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     IconButton(onClick = onClick) {
         Icon(
@@ -101,7 +95,31 @@ fun RetryImage(
 }
 
 @Composable
-@Preview
+@Preview(showBackground = true)
+fun LoadingViewPreview() {
+    LoadingView()
+}
+
+@Composable
+@Preview(showBackground = true)
+fun ErrorViewPreview() {
+    ErrorView {}
+}
+
+@Composable
+@Preview(showBackground = true)
+fun LoadingItemPreview() {
+    LoadingItem()
+}
+
+@Composable
+@Preview(showBackground = true)
 fun ErrorItemPreview() {
     ErrorItem {}
+}
+
+@Composable
+@Preview(showBackground = true)
+fun EmptyItemViewPreview() {
+    EmptyItemView()
 }

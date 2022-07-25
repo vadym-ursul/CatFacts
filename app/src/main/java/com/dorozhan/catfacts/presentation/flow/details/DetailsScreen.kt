@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.dorozhan.catfacts.R
+import com.dorozhan.catfacts.presentation.library.BackAppBar
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -31,14 +32,9 @@ fun CatDetailsScreen(
     val breedState = detailsViewModel.breedLiveData.observeAsState()
     Scaffold(
         topBar = {
-            TopAppBar(
-                navigationIcon = {
-                    IconButton(onClick = { navigator.navigateUp() }) {
-                        Icon(imageVector = Icons.Rounded.ArrowBack, contentDescription = "Back")
-                    }
-                },
-                title = { Text(text = breedState.value?.title ?: "") }
-            )
+            BackAppBar(
+                text = breedState.value?.title ?: "",
+                onBackClick = { navigator.navigateUp() })
         },
         content = { padding ->
             Box(

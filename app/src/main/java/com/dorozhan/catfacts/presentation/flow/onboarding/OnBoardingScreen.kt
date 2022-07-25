@@ -18,7 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.dorozhan.catfacts.R
-import com.dorozhan.catfacts.presentation.flow.destinations.CatsCatalogScreenDestination
+import com.dorozhan.catfacts.presentation.flow.destinations.CatalogScreenDestination
 import com.google.accompanist.pager.*
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -58,7 +58,7 @@ fun OnBoardingScreen(
         ) {
             onBoardingViewModel.finishOnboard()
             navigator.popBackStack()
-            navigator.navigate(CatsCatalogScreenDestination)
+            navigator.navigate(CatalogScreenDestination)
         }
     }
 }
