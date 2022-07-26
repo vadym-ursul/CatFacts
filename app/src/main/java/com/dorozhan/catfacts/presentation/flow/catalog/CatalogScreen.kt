@@ -8,6 +8,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
@@ -15,10 +16,13 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.dorozhan.catfacts.R
 import com.dorozhan.catfacts.presentation.flow.destinations.CatDetailsScreenDestination
 import com.dorozhan.catfacts.presentation.flow.destinations.FavoritesScreenDestination
-import com.dorozhan.catfacts.presentation.library.BreedItem
+import com.dorozhan.catfacts.presentation.library.BreedCardItem
 import com.dorozhan.catfacts.presentation.library.CatalogAppBar
 import com.dorozhan.catfacts.presentation.library.PagingList
 import com.dorozhan.catfacts.presentation.library.SearchAppBar
+import com.dorozhan.catfacts.presentation.util.ItemAnimationArgs
+import com.dorozhan.catfacts.presentation.util.animateItem
+import com.dorozhan.catfacts.presentation.util.calculateEasing
 import com.dorozhan.catfacts.presentation.util.rememberLazyListState
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
@@ -79,8 +83,22 @@ fun CatalogScreen(
                 PagingList(
                     state = listState,
                     items = items,
-                    itemContent = { item ->
-                        BreedItem(
+                    itemContent = { item, itemIndex ->
+                        // animation setup for item appearing
+                        val easing = listState.calculateEasing(itemIndex)
+                        val args = ItemAnimationArgs(
+                            scaleRange = 0f..1f,
+                            alphaRange = 0f..1f,
+                            easing = easing
+                        )
+                        val animationData = animateItem(args)
+                        val modifier = Modifier.graphicsLayer(
+                            alpha = animationData.alpha,
+                            scaleX = animationData.scale,
+                            scaleY = animationData.scale)
+
+                        BreedCardItem(
+                            modifier = modifier,
                             breed = item,
                             onItemClick = {
                                 navigator.navigate(CatDetailsScreenDestination(breedName = it.title))

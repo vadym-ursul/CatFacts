@@ -4,8 +4,6 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -14,7 +12,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.dorozhan.catfacts.R
 import com.dorozhan.catfacts.presentation.flow.destinations.CatDetailsScreenDestination
 import com.dorozhan.catfacts.presentation.library.BackAppBar
-import com.dorozhan.catfacts.presentation.library.BreedItem
+import com.dorozhan.catfacts.presentation.library.BreedListItem
 import com.dorozhan.catfacts.presentation.library.PagingList
 import com.dorozhan.catfacts.presentation.util.rememberLazyListState
 import com.ramcosta.composedestinations.annotation.Destination
@@ -41,8 +39,8 @@ fun FavoritesScreen(
                     modifier = Modifier.fillMaxSize(),
                     state = listState,
                     items = items,
-                    itemContent = { item ->
-                        BreedItem(
+                    itemContent = { item, _ ->
+                        BreedListItem(
                             breed = item,
                             isFavoriteVisible = false,
                             onItemClick = {

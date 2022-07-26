@@ -1,5 +1,8 @@
 package com.dorozhan.catfacts.presentation.util
 
+import androidx.compose.animation.core.Easing
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -16,4 +19,15 @@ fun <T : Any> LazyPagingItems<T>.rememberLazyListState(): LazyListState {
         // Return rememberLazyListState (normal case).
         else -> androidx.compose.foundation.lazy.rememberLazyListState()
     }
+}
+
+
+@Composable
+fun LazyListState.calculateEasing(index: Int, columnCount: Int = 1): Easing {
+    val row = index / columnCount
+    val firstVisibleRow = firstVisibleItemIndex
+    val visibleRows = layoutInfo.visibleItemsInfo.count()
+    val scrollingToBottom = firstVisibleRow < row
+    val isFirstLoad = visibleRows == 0
+    return if (scrollingToBottom || isFirstLoad) LinearOutSlowInEasing else FastOutSlowInEasing
 }
