@@ -5,12 +5,14 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material.ContentAlpha
+import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -23,12 +25,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import com.dorozhan.catfacts.R
-import com.dorozhan.catfacts.presentation.flow.destinations.FavoritesScreenDestination
 
 @Composable
 private fun BaseTitleContentProvider(
     content: @Composable () -> Unit,
-) = ProvideTextStyle(value = MaterialTheme.typography.h6) {
+) = ProvideTextStyle(value = MaterialTheme.typography.titleLarge) {
     CompositionLocalProvider(
         LocalContentAlpha provides ContentAlpha.high,
         content = content
@@ -36,29 +37,39 @@ private fun BaseTitleContentProvider(
 }
 
 @Composable
-fun BackIcon(
+private fun BaseTitleText(
+    text: String,
+) = BaseTitleContentProvider {
+    Text(text = text,
+        color = MaterialTheme.colorScheme.onSurfaceVariant)
+}
+
+@Composable
+fun BaseBackIcon(
     onBackClick: () -> Unit,
-) {
-    IconButton(onClick = { onBackClick() }) {
-        Icon(
-            imageVector = Icons.Rounded.ArrowBack,
-            contentDescription = "Back",
-        )
-    }
+) = IconButton(onClick = { onBackClick() }) {
+    Icon(
+        imageVector = Icons.Rounded.ArrowBack,
+        contentDescription = "Back",
+        tint = MaterialTheme.colorScheme.onSurfaceVariant
+    )
 }
 
 @Composable
 fun BackAppBar(
     text: String = "",
-    title: @Composable () -> Unit = { Text(text = text) },
+    title: @Composable () -> Unit = { BaseTitleText(text = text) },
     onBackClick: () -> Unit,
     actions: @Composable RowScope.() -> Unit = {},
 ) {
-    TopAppBar(
-        navigationIcon = {
-            BackIcon(onBackClick = onBackClick)
-        },
+    SmallTopAppBar(
+        navigationIcon = { BaseBackIcon(onBackClick = onBackClick) },
         title = title,
+        colors = TopAppBarDefaults.smallTopAppBarColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+            titleContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            actionIconContentColor = MaterialTheme.colorScheme.onSurfaceVariant
+        ),
         actions = actions
     )
 }
@@ -67,15 +78,21 @@ fun BackAppBar(
 fun CatalogAppBar(
     title: String,
     onSearchClick: () -> Unit = {},
-    onFavoritesClick: () -> Unit = {}
+    onFavoritesClick: () -> Unit = {},
 ) {
-    TopAppBar(
-        title = { Text(text = title) },
+    SmallTopAppBar(
+        title = { BaseTitleText(text = title) },
+        colors = TopAppBarDefaults.smallTopAppBarColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+            titleContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            actionIconContentColor = MaterialTheme.colorScheme.onSurfaceVariant
+        ),
         actions = {
             IconButton(
                 onClick = onSearchClick
             ) {
-                Icon(imageVector = Icons.Rounded.Search, contentDescription = "Search")
+                Icon(imageVector = Icons.Rounded.Search,
+                    contentDescription = "Search")
             }
             IconButton(
                 onClick = onFavoritesClick
@@ -110,36 +127,36 @@ fun SearchAppBar(
 
     BackAppBar(
         title = {
-            BaseTitleContentProvider {
-                NoPaddingTextField(
-                    value = text,
-                    onValueChange = onTextChange,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .focusRequester(focusRequester),
-                    placeholder = {
-                        Text(
-                            text = textPlaceholder,
-                            color = MaterialTheme.colors.surface.copy(alpha = ContentAlpha.medium),
-                            style = MaterialTheme.typography.h6
-                        )
-                    },
-                    singleLine = true,
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Search
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onSearch = {
-                            onSearchClick(text)
-                        }
-                    ),
-                    colors = TextFieldDefaults.textFieldColors(
-                        backgroundColor = Color.Transparent,
-                        cursorColor = MaterialTheme.colors.surface.copy(alpha = ContentAlpha.medium)
+            NoPaddingTextField(
+                value = text,
+                onValueChange = onTextChange,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .focusRequester(focusRequester),
+                placeholder = {
+                    Text(
+                        text = textPlaceholder,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = ContentAlpha.medium),
+                        style = MaterialTheme.typography.titleMedium
                     )
-                )
-            }
-
+                },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Search
+                ),
+                keyboardActions = KeyboardActions(
+                    onSearch = {
+                        onSearchClick(text)
+                    }
+                ),
+                textStyle = MaterialTheme.typography.titleMedium,
+                colors = TextFieldDefaults.textFieldColors(
+                    containerColor = Color.Transparent,
+                    textColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    cursorColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = ContentAlpha.medium),
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent)
+            )
         },
         onBackClick = onBackClickListener,
         actions = {
@@ -149,8 +166,7 @@ fun SearchAppBar(
                 ) {
                     Icon(
                         imageVector = Icons.Default.Close,
-                        contentDescription = "Close"
-                    )
+                        contentDescription = "Close")
                 }
             }
         }

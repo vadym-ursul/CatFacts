@@ -17,3 +17,4 @@
 - [Accompanist](https://github.com/google/accompanist)
 - [Compose Destinations](https://github.com/raamcosta/compose-destinations)
 - [Splash Screen](https://developer.android.com/guide/topics/ui/splash-screen)
+- [Material 3](https://developer.android.com/jetpack/androidx/releases/compose-material3)

@@ -4,7 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,7 +37,7 @@ fun BreedListItem(
             modifier = Modifier.weight(1f),
             text = breed.title,
             maxLines = 1,
-            style = MaterialTheme.typography.h6,
+            style = MaterialTheme.typography.bodyLarge,
             overflow = TextOverflow.Ellipsis
         )
         Box(
@@ -65,7 +65,7 @@ fun BreedListItem(
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BreedCardItem(
     modifier: Modifier = Modifier,
@@ -78,7 +78,7 @@ fun BreedCardItem(
     Card(
         modifier = modifier,
         onClick = { onItemClick(breed) },
-        elevation = 4.dp,
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         shape = shape
     ) {
         Box(modifier = modifier) {
@@ -99,7 +99,7 @@ fun BreedCardItem(
                         .padding(16.dp)
                         .size(34.dp),
                     shape = CircleShape,
-                    elevation = 4.dp
+                    shadowElevation = 4.dp
                 ) {
                     FavoriteButton(
                         modifier = Modifier.padding(8.dp),
@@ -113,13 +113,14 @@ fun BreedCardItem(
                     .align(Alignment.BottomStart)
                     .padding(16.dp),
                 shape = shape,
-                elevation = 4.dp
+                shadowElevation = 4.dp
             ) {
                 Text(
                     modifier = Modifier.padding(10.dp),
                     text = breed.title,
                     maxLines = 2,
-                    style = MaterialTheme.typography.subtitle2,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    style = MaterialTheme.typography.labelMedium,
                     overflow = TextOverflow.Ellipsis)
             }
         }
