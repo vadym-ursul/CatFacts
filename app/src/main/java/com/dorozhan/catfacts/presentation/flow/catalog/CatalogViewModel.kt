@@ -42,7 +42,7 @@ class CatalogViewModel @Inject constructor(
         _searchActionLiveData.value = text
     }
 
-    fun onFavoriteClicked(breed: Breed, favorite: Boolean) {
+    fun onFavoriteClick(breed: Breed, favorite: Boolean) {
         viewModelScope.launch {
             breedsRepository.setFavorite(breed, favorite)
         }

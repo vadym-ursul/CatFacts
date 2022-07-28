@@ -22,9 +22,26 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import com.dorozhan.catfacts.R
+
+@Composable
+fun defaultSmallTopAppBarColors() = TopAppBarDefaults.smallTopAppBarColors(
+    containerColor = MaterialTheme.colorScheme.surfaceVariant,
+    titleContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+    navigationIconContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+    actionIconContentColor = MaterialTheme.colorScheme.onSurfaceVariant
+)
+
+@Composable
+fun defaultTextFieldColors() = TextFieldDefaults.textFieldColors(
+    containerColor = Color.Transparent,
+    textColor = MaterialTheme.colorScheme.onSurfaceVariant,
+    cursorColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = ContentAlpha.medium),
+    focusedIndicatorColor = Color.Transparent,
+    unfocusedIndicatorColor = Color.Transparent)
 
 @Composable
 private fun BaseTitleContentProvider(
@@ -40,53 +57,67 @@ private fun BaseTitleContentProvider(
 private fun BaseTitleText(
     text: String,
 ) = BaseTitleContentProvider {
-    Text(text = text,
-        color = MaterialTheme.colorScheme.onSurfaceVariant)
+    Text(text = text)
 }
 
 @Composable
-fun BaseBackIcon(
-    onBackClick: () -> Unit,
+private fun BaseBackIcon(
+    onBackClick: () -> Unit = {},
 ) = IconButton(onClick = { onBackClick() }) {
     Icon(
         imageVector = Icons.Rounded.ArrowBack,
-        contentDescription = "Back",
-        tint = MaterialTheme.colorScheme.onSurfaceVariant
-    )
+        contentDescription = "Back")
 }
 
 @Composable
 fun BackAppBar(
     text: String = "",
     title: @Composable () -> Unit = { BaseTitleText(text = text) },
-    onBackClick: () -> Unit,
+    colors: TopAppBarColors = defaultSmallTopAppBarColors(),
+    onBackClick: () -> Unit = {},
     actions: @Composable RowScope.() -> Unit = {},
 ) {
     SmallTopAppBar(
         navigationIcon = { BaseBackIcon(onBackClick = onBackClick) },
         title = title,
-        colors = TopAppBarDefaults.smallTopAppBarColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant,
-            titleContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            actionIconContentColor = MaterialTheme.colorScheme.onSurfaceVariant
-        ),
+        colors = colors,
         actions = actions
+    )
+}
+
+@Composable
+fun DetailsAppBar(
+    modifier: Modifier = Modifier,
+    text: String = "",
+    title: @Composable () -> Unit = { BaseTitleText(text = text) },
+    isFavoriteChecked: Boolean?,
+    colors: TopAppBarColors = defaultSmallTopAppBarColors(),
+    onBackClick: () -> Unit = {},
+    onFavoriteClick: (Boolean) -> Unit = { _ -> },
+) {
+    CenterAlignedTopAppBar(
+        modifier = modifier,
+        navigationIcon = { BaseBackIcon(onBackClick = onBackClick) },
+        title = title,
+        colors = colors,
+        actions = {
+            FavoriteButton(
+                checked = isFavoriteChecked ?: false,
+                onCheckedChange = onFavoriteClick)
+        }
     )
 }
 
 @Composable
 fun CatalogAppBar(
     title: String,
+    colors: TopAppBarColors = defaultSmallTopAppBarColors(),
     onSearchClick: () -> Unit = {},
     onFavoritesClick: () -> Unit = {},
 ) {
     SmallTopAppBar(
         title = { BaseTitleText(text = title) },
-        colors = TopAppBarDefaults.smallTopAppBarColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant,
-            titleContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            actionIconContentColor = MaterialTheme.colorScheme.onSurfaceVariant
-        ),
+        colors = colors,
         actions = {
             IconButton(
                 onClick = onSearchClick
@@ -107,7 +138,11 @@ fun CatalogAppBar(
 @Composable
 fun SearchAppBar(
     text: String,
+    textStyle: TextStyle = MaterialTheme.typography.titleMedium,
     textPlaceholder: String = stringResource(id = R.string.search),
+    textPlaceholderColor: Color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = ContentAlpha.medium),
+    textPlaceholderStyle: TextStyle = MaterialTheme.typography.titleMedium,
+    colors: TextFieldColors = defaultTextFieldColors(),
     onBackClick: () -> Unit = {},
     onTextChange: (String) -> Unit = {},
     onSearchClick: (String) -> Unit = {},
@@ -136,8 +171,8 @@ fun SearchAppBar(
                 placeholder = {
                     Text(
                         text = textPlaceholder,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = ContentAlpha.medium),
-                        style = MaterialTheme.typography.titleMedium
+                        color = textPlaceholderColor,
+                        style = textPlaceholderStyle
                     )
                 },
                 singleLine = true,
@@ -149,13 +184,8 @@ fun SearchAppBar(
                         onSearchClick(text)
                     }
                 ),
-                textStyle = MaterialTheme.typography.titleMedium,
-                colors = TextFieldDefaults.textFieldColors(
-                    containerColor = Color.Transparent,
-                    textColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                    cursorColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = ContentAlpha.medium),
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent)
+                textStyle = textStyle,
+                colors = colors
             )
         },
         onBackClick = onBackClickListener,

@@ -1,12 +1,14 @@
 package com.dorozhan.catfacts.presentation.flow.catalog
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.Scaffold
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -24,11 +26,11 @@ import com.dorozhan.catfacts.presentation.util.rememberLazyListState
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @RootNavGraph(start = true)
 @Destination
 @Composable
@@ -36,8 +38,26 @@ fun CatalogScreen(
     navigator: DestinationsNavigator,
     catalogViewModel: CatalogViewModel = hiltViewModel(),
 ) {
+    val systemUiController = rememberSystemUiController()
+    val statusBarColor = MaterialTheme.colorScheme.surfaceVariant
+    val isSystemInDarkTheme = isSystemInDarkTheme()
+
+    SideEffect {
+        systemUiController.apply {
+            setStatusBarColor(
+                color = statusBarColor,
+                darkIcons = !isSystemInDarkTheme
+            )
+            setNavigationBarColor(
+                color = statusBarColor.copy(alpha = 0.5f),
+                darkIcons = !isSystemInDarkTheme
+            )
+        }
+    }
+
     val showSearchBar = catalogViewModel.showSearchBarLiveData.observeAsState(false).value
     Scaffold(
+        modifier = Modifier.statusBarsPadding(),
         topBar = {
             if (!showSearchBar) {
                 CatalogAppBar(title = stringResource(id = R.string.cat_facts),
@@ -103,7 +123,7 @@ fun CatalogScreen(
                                 navigator.navigate(CatDetailsScreenDestination(breedName = it.title))
                             },
                             onFavoriteClick = { breed, checked ->
-                                catalogViewModel.onFavoriteClicked(breed, checked)
+                                catalogViewModel.onFavoriteClick(breed, checked)
                             }
                         )
                     })

@@ -27,4 +27,12 @@ class DetailsViewModel @Inject constructor(
                 breedsRepository.getBreedByName(savedStateHandle.navArgs<DetailsNavArgs>().breedName)
         }
     }
+
+    fun onFavoriteClick(breed: Breed?, favorite: Boolean) {
+        viewModelScope.launch {
+            breed?.let {
+                breedsRepository.setFavorite(it, favorite)
+            }
+        }
+    }
 }

@@ -19,6 +19,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.dorozhan.catfacts.R
 import com.dorozhan.catfacts.presentation.flow.destinations.CatalogScreenDestination
+import com.dorozhan.catfacts.presentation.theme.PADDING_20
+import com.dorozhan.catfacts.presentation.theme.PADDING_40
 import com.google.accompanist.pager.*
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -89,8 +91,8 @@ fun PagerScreen(onBoardingPage: OnBoardingPage) {
         Text(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 40.dp)
-                .padding(top = 20.dp),
+                .padding(horizontal = PADDING_40)
+                .padding(top = PADDING_20),
             text = stringResource(onBoardingPage.description),
             fontSize = MaterialTheme.typography.subtitle1.fontSize,
             fontWeight = FontWeight.Medium,
@@ -108,7 +110,7 @@ fun FinishButton(
 ) {
     Row(
         modifier = modifier
-            .padding(horizontal = 40.dp)
+            .padding(horizontal = PADDING_40)
             .fillMaxWidth(),
         verticalAlignment = Alignment.Top,
         horizontalArrangement = Arrangement.Center

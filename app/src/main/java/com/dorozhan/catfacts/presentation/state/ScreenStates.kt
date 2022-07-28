@@ -10,6 +10,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.dorozhan.catfacts.R
+import com.dorozhan.catfacts.presentation.theme.PADDING_16
 
 @Composable
 fun LoadingView(
@@ -46,7 +47,7 @@ fun LoadingItem() {
     CircularProgressIndicator(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(PADDING_16)
             .wrapContentWidth(Alignment.CenterHorizontally)
             .size(24.dp),
         strokeWidth = 2.dp

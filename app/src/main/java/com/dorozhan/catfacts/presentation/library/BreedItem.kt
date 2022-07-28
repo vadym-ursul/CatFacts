@@ -3,7 +3,6 @@ package com.dorozhan.catfacts.presentation.library
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -17,6 +16,9 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.dorozhan.catfacts.R
 import com.dorozhan.catfacts.domain.model.Breed
+import com.dorozhan.catfacts.presentation.theme.PADDING_10
+import com.dorozhan.catfacts.presentation.theme.PADDING_16
+import com.dorozhan.catfacts.presentation.theme.PADDING_8
 
 @Composable
 fun BreedListItem(
@@ -27,7 +29,7 @@ fun BreedListItem(
 ) {
     Row(
         modifier = Modifier
-            .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)
+            .padding(horizontal = PADDING_16, vertical = PADDING_8)
             .fillMaxWidth()
             .clickable { onItemClick(breed) },
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -58,6 +60,7 @@ fun BreedListItem(
             if (isFavoriteVisible) {
                 FavoriteButton(
                     modifier = Modifier.align(Alignment.TopEnd),
+                    color = MaterialTheme.colorScheme.primary,
                     checked = breed.favorite,
                     onCheckedChange = { onFavoriteClick(breed, it) })
             }
@@ -74,7 +77,7 @@ fun BreedCardItem(
     onItemClick: (Breed) -> Unit = {},
     onFavoriteClick: (Breed, Boolean) -> Unit = { _, _ -> },
 ) {
-    val shape = RoundedCornerShape(16.dp) // todo add to theme
+    val shape = MaterialTheme.shapes.large
     Card(
         modifier = modifier,
         onClick = { onItemClick(breed) },
@@ -86,7 +89,8 @@ fun BreedCardItem(
                 model = breed.imageUrl,
                 contentDescription = null,
                 modifier = Modifier
-                    .fillMaxSize(),
+                    .fillMaxWidth()
+                    .aspectRatio(1f),
                 contentScale = ContentScale.Crop,
                 placeholder = painterResource(id = R.drawable.ic_cat_placeholder_512),
                 error = painterResource(id = R.drawable.ic_cat_placeholder_512),
@@ -102,7 +106,8 @@ fun BreedCardItem(
                     shadowElevation = 4.dp
                 ) {
                     FavoriteButton(
-                        modifier = Modifier.padding(8.dp),
+                        modifier = Modifier.padding(PADDING_8),
+                        color = MaterialTheme.colorScheme.primary,
                         checked = breed.favorite,
                         onCheckedChange = { onFavoriteClick(breed, it) })
                 }
@@ -116,7 +121,7 @@ fun BreedCardItem(
                 shadowElevation = 4.dp
             ) {
                 Text(
-                    modifier = Modifier.padding(10.dp),
+                    modifier = Modifier.padding(PADDING_10),
                     text = breed.title,
                     maxLines = 2,
                     color = MaterialTheme.colorScheme.onSurface,
