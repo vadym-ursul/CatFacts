@@ -42,6 +42,7 @@ fun CatalogScreen(
     val statusBarColor = MaterialTheme.colorScheme.surfaceVariant
     val isSystemInDarkTheme = isSystemInDarkTheme()
 
+    // todo refactor setting system bars colors
     SideEffect {
         systemUiController.apply {
             setStatusBarColor(
