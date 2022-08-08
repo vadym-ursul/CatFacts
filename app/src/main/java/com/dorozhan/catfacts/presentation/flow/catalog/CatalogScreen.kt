@@ -6,9 +6,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.Scaffold
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -23,14 +23,15 @@ import com.dorozhan.catfacts.presentation.library.CatalogAppBar
 import com.dorozhan.catfacts.presentation.library.PagingList
 import com.dorozhan.catfacts.presentation.library.SearchAppBar
 import com.dorozhan.catfacts.presentation.util.rememberLazyListState
+import com.dorozhan.catfacts.presentation.util.setSystemBarsColor
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
+@OptIn(ExperimentalMaterial3Api::class)
 @RootNavGraph(start = true)
 @Destination
 @Composable
@@ -38,23 +39,10 @@ fun CatalogScreen(
     navigator: DestinationsNavigator,
     catalogViewModel: CatalogViewModel = hiltViewModel(),
 ) {
-    val systemUiController = rememberSystemUiController()
     val statusBarColor = MaterialTheme.colorScheme.surfaceVariant
     val isSystemInDarkTheme = isSystemInDarkTheme()
 
-    // todo refactor setting system bars colors
-    SideEffect {
-        systemUiController.apply {
-            setStatusBarColor(
-                color = statusBarColor,
-                darkIcons = !isSystemInDarkTheme
-            )
-            setNavigationBarColor(
-                color = statusBarColor.copy(alpha = 0.5f),
-                darkIcons = !isSystemInDarkTheme
-            )
-        }
-    }
+    setSystemBarsColor(statusBarColor, statusBarColor.copy(alpha = 0.5f), !isSystemInDarkTheme)
 
     val showSearchBar = catalogViewModel.showSearchBarLiveData.observeAsState(false).value
     Scaffold(
@@ -102,23 +90,8 @@ fun CatalogScreen(
                 PagingList(
                     state = listState,
                     items = items,
-                    itemContent = { item, itemIndex ->
-                        // animation setup for item appearing
-//                        val easing = listState.calculateEasing(itemIndex)
-//                        val args = ItemAnimationArgs(
-//                            scaleRange = 0f..1f,
-//                            alphaRange = 0f..1f,
-//                            easing = easing
-//                        )
-//                        val animationData = animateItem(args)
-//                        val modifier = Modifier.graphicsLayer(
-//                            alpha = animationData.alpha,
-//                            scaleX = animationData.scale,
-//                            scaleY = animationData.scale)
-                        // todo optimize performance for animations
-
+                    itemContent = { item, _ ->
                         BreedCardItem(
-                            //      modifier = modifier,
                             breed = item,
                             onItemClick = {
                                 navigator.navigate(CatDetailsScreenDestination(breedName = it.title))

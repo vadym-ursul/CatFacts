@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.dorozhan.catfacts.presentation.library
 
 import androidx.activity.compose.BackHandler

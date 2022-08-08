@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.Scaffold
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -20,7 +19,7 @@ import com.dorozhan.catfacts.presentation.library.BackAppBar
 import com.dorozhan.catfacts.presentation.library.BreedCardItem
 import com.dorozhan.catfacts.presentation.library.PagingList
 import com.dorozhan.catfacts.presentation.util.rememberLazyListState
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.dorozhan.catfacts.presentation.util.setSystemBarsColor
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -30,22 +29,10 @@ fun FavoritesScreen(
     navigator: DestinationsNavigator,
     favoritesViewModel: FavoritesViewModel = hiltViewModel(),
 ) {
-    val systemUiController = rememberSystemUiController()
     val statusBarColor = MaterialTheme.colorScheme.surfaceVariant
     val isSystemInDarkTheme = isSystemInDarkTheme()
 
-    SideEffect {
-        systemUiController.apply {
-            setStatusBarColor(
-                color = statusBarColor,
-                darkIcons = !isSystemInDarkTheme
-            )
-            setNavigationBarColor(
-                color = statusBarColor.copy(alpha = 0.5f),
-                darkIcons = !isSystemInDarkTheme
-            )
-        }
-    }
+    setSystemBarsColor(statusBarColor, statusBarColor.copy(alpha = 0.5f), !isSystemInDarkTheme)
 
     Scaffold(
         modifier = Modifier.statusBarsPadding(),

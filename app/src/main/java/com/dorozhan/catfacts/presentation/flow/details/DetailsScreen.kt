@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -18,7 +17,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.dorozhan.catfacts.R
 import com.dorozhan.catfacts.presentation.library.DetailsAppBar
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.dorozhan.catfacts.presentation.util.setSystemBarsColor
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -31,10 +30,7 @@ fun CatDetailsScreen(
     val breedState = detailsViewModel.breedLiveData.observeAsState()
     val isFavoriteChecked = remember { mutableStateOf(breedState.value?.favorite) }
 
-    val systemUiController = rememberSystemUiController()
-    SideEffect {
-        systemUiController.setSystemBarsColor(color = Color.Black, darkIcons = false)
-    }
+    setSystemBarsColor(Color.Black, darkIcons = false)
 
     Scaffold(
         modifier = Modifier

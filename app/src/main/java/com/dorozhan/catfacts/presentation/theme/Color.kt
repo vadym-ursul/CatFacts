@@ -2,11 +2,6 @@ package com.dorozhan.catfacts.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 
-//val purple200 = Color(0xFFBB86FC)
-//val purple500 = Color(0xFF6200EE)
-//val purple700 = Color(0xFF3700B3)
-//val teal200 = Color(0xFF03DAC5) // todo remove
-
 val md_theme_light_primary = Color(0xFF00696A)
 val md_theme_light_onPrimary = Color(0xFFFFFFFF)
 val md_theme_light_primaryContainer = Color(0xFF6FF6F7)
