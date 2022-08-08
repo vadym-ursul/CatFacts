@@ -1,11 +1,11 @@
 package com.dorozhan.catfacts.presentation.library
 
-import androidx.compose.material.Icon
-import androidx.compose.material.IconToggleButton
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconToggleButton
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -16,13 +16,11 @@ fun FavoriteButton(
     modifier: Modifier = Modifier,
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
-    color: Color = MaterialTheme.colors.primary
+    color: Color = LocalContentColor.current,
 ) {
     IconToggleButton(
         checked = checked,
-        onCheckedChange = {
-            onCheckedChange.invoke(it)
-        },
+        onCheckedChange = onCheckedChange,
         modifier = modifier
     ) {
         Icon(
