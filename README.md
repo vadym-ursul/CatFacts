@@ -1,5 +1,9 @@
 # CatFacts
 
+
+![summary](https://user-images.githubusercontent.com/26791131/184088299-a0058a82-4092-4fd1-ad44-0227d97f2cc3.png)
+https://madscorecard.withgoogle.com/scorecards/74776971/#summary
+
 ## <br/><br/>Built With 🛠
 - [Kotlin](https://kotlinlang.org/)
 - [Coroutines](https://kotlinlang.org/docs/reference/coroutines-overview.html)
