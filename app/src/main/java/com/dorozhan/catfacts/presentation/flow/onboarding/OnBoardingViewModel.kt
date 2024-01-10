@@ -1,8 +1,10 @@
 package com.dorozhan.catfacts.presentation.flow.onboarding
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.dorozhan.catfacts.data.repository.OnboardRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -11,6 +13,8 @@ class OnBoardingViewModel @Inject constructor(
 ) : ViewModel() {
 
     fun finishOnboard() {
-        onboardRepository.isOnBoardPassed = true
+        viewModelScope.launch {
+            onboardRepository.setOnboardingPassed(true)
+        }
     }
 }

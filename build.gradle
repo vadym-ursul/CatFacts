@@ -10,6 +10,10 @@ buildscript {
         room_version = '2.4.2'
         accompanist_version = '0.24.13-rc'
         lifecycle_version = '2.5.0'
+        datastore_version = '1.0.0'
+        target_sdk = 33
+        compile_sdk = 34
+        min_sdk = 26
     }
 
     dependencies {

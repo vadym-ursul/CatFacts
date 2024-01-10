@@ -8,12 +8,12 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk compile_sdk
 
     defaultConfig {
-        applicationId "com.dorozhan.catfacts"
-        minSdk 26
-        targetSdk 32
+        applicationId "com.sampleapps.catfacts"
+        minSdk min_sdk
+        targetSdk target_sdk
         versionCode 1
         versionName "1.0"
 
@@ -127,6 +127,9 @@ dependencies {
     // Compose Material 3
     implementation("androidx.compose.material3:material3:$compose_material3_version")
     implementation("androidx.compose.material3:material3-window-size-class:$compose_material3_version")
+
+    // DataStore
+    implementation("androidx.datastore:datastore-preferences:$datastore_version")
 
     // Tests
     testImplementation 'junit:junit:4.13.2'

@@ -29,7 +29,8 @@ class RepositoryModule {
     @Provides
     fun provideOnboardRepository(
         storage: Storage,
+        @IoDispatcher defaultDispatcher: CoroutineDispatcher
     ): OnboardRepository {
-        return OnboardRepository(storage)
+        return OnboardRepository(storage, defaultDispatcher)
     }
 }

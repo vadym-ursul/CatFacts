@@ -3,8 +3,12 @@ package com.dorozhan.catfacts.presentation.flow.splash
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.dorozhan.catfacts.data.repository.OnboardRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
@@ -14,11 +18,15 @@ class SplashViewModel @Inject constructor(
 
     private val _isLoading: MutableLiveData<Boolean> = MutableLiveData(true)
     val isLoading: LiveData<Boolean> = _isLoading
-    private val _onboardPassedLiveData = MutableLiveData<Boolean>()
-    val onboardPassedLiveData: LiveData<Boolean?> = _onboardPassedLiveData
+    val onboardPassedFlow: StateFlow<Boolean?> =
+        onboardRepository.isOnBoardPassed
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5_000),
+                initialValue = null
+            )
 
-    init {
-        _onboardPassedLiveData.value = onboardRepository.isOnBoardPassed
-        _isLoading.value = false
+    fun setLoading(isLoading: Boolean) {
+        _isLoading.value = isLoading
     }
 }
