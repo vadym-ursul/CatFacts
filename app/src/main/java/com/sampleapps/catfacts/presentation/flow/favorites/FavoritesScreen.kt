@@ -7,12 +7,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.Scaffold
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sampleapps.catfacts.R
 import com.sampleapps.catfacts.presentation.flow.destinations.CatDetailsScreenDestination
 import com.sampleapps.catfacts.presentation.library.BackAppBar
@@ -20,9 +23,8 @@ import com.sampleapps.catfacts.presentation.library.BreedCardItem
 import com.sampleapps.catfacts.presentation.library.PagingList
 import com.sampleapps.catfacts.presentation.util.rememberLazyListState
 import com.sampleapps.catfacts.presentation.util.setSystemBarsColor
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Destination
 @Composable
 fun FavoritesScreen(

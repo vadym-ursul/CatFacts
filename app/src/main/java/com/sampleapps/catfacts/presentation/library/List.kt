@@ -10,8 +10,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.itemsIndexed
-import com.sampleapps.catfacts.presentation.state.*
+import com.sampleapps.catfacts.presentation.state.EmptyItemView
+import com.sampleapps.catfacts.presentation.state.ErrorItem
+import com.sampleapps.catfacts.presentation.state.ErrorView
+import com.sampleapps.catfacts.presentation.state.LoadingItem
+import com.sampleapps.catfacts.presentation.state.LoadingView
 
 @Composable
 fun <T : Any> PagingList(
@@ -25,8 +28,8 @@ fun <T : Any> PagingList(
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        itemsIndexed(items) { index, item ->
-            item?.let {
+        items(items.itemCount) { index ->
+            items[index]?.let {
                 this@LazyColumn.itemContent(it, index)
             }
         }

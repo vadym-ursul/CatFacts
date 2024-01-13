@@ -44,16 +44,16 @@ fun NoPaddingTextField(
     colors: TextFieldColors = TextFieldDefaults.textFieldColors(),
 ) {
     // If color is not provided via the text style, use content color as a default
-    val textColor = textStyle.color.takeOrElse {
-        colors.textColor(enabled).value
-    }
-    val mergedTextStyle = textStyle.merge(TextStyle(color = textColor))
+//    val textColor = textStyle.color.takeOrElse {
+//        colors.textColor(enabled).value
+//    }
+  //  val mergedTextStyle = textStyle.merge(TextStyle(color = textColor))
 
     @OptIn(ExperimentalMaterial3Api::class)
     BasicTextField(
         value = value,
         modifier = modifier
-            .background(colors.containerColor(enabled).value, shape)
+          //  .background(colors.containerColor(enabled).value, shape)
             .indicatorLine(enabled, isError, interactionSource, colors)
             .defaultMinSize(
                 minWidth = TextFieldDefaults.MinWidth,
@@ -62,8 +62,8 @@ fun NoPaddingTextField(
         onValueChange = onValueChange,
         enabled = enabled,
         readOnly = readOnly,
-        textStyle = mergedTextStyle,
-        cursorBrush = SolidColor(colors.cursorColor(isError).value),
+     //   textStyle = mergedTextStyle,
+       // cursorBrush = SolidColor(colors.cursorColor(isError).value),
         visualTransformation = visualTransformation,
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,

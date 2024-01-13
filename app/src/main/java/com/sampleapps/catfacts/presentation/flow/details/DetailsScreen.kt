@@ -3,6 +3,7 @@ package com.sampleapps.catfacts.presentation.flow.details
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
@@ -21,6 +22,7 @@ import com.sampleapps.catfacts.presentation.util.setSystemBarsColor
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Destination(navArgsDelegate = DetailsNavArgs::class)
 @Composable
 fun CatDetailsScreen(

@@ -40,7 +40,7 @@ fun defaultSmallTopAppBarColors() = TopAppBarDefaults.smallTopAppBarColors(
 @Composable
 fun defaultTextFieldColors() = TextFieldDefaults.textFieldColors(
     containerColor = Color.Transparent,
-    textColor = MaterialTheme.colorScheme.onSurfaceVariant,
+    //textColor = MaterialTheme.colorScheme.onSurfaceVariant,
     cursorColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = ContentAlpha.medium),
     focusedIndicatorColor = Color.Transparent,
     unfocusedIndicatorColor = Color.Transparent)
