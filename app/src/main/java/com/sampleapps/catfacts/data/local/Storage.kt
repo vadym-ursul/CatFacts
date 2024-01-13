@@ -19,6 +19,7 @@ class Storage @Inject constructor(
 ) {
     private companion object {
         val IS_ONBOARDING_PASSED = booleanPreferencesKey("is_onboarding_passed")
+        val IS_LIST_LAYOUT = booleanPreferencesKey("is_list_layout")
         const val TAG = "Storage"
     }
 
@@ -39,5 +40,24 @@ class Storage @Inject constructor(
         }
         .map { preferences ->
             preferences[IS_ONBOARDING_PASSED] ?: false
+        }
+
+    suspend fun saveListLayout(isListLayout: Boolean) {
+        dataStore.edit { prefs ->
+            prefs[IS_LIST_LAYOUT] = isListLayout
+        }
+    }
+
+    val isListLayout: Flow<Boolean> = dataStore.data
+        .catch {
+            if (it is IOException) {
+                Log.e(TAG, "Error reading preferences", it)
+                emit(emptyPreferences())
+            } else {
+                throw it
+            }
+        }
+        .map { preferences ->
+            preferences[IS_LIST_LAYOUT] ?: true
         }
 }

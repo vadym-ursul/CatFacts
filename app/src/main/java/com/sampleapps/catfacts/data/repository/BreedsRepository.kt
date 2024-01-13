@@ -1,6 +1,11 @@
 package com.sampleapps.catfacts.data.repository
 
-import androidx.paging.*
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.PagingSource
+import androidx.paging.map
 import com.sampleapps.catfacts.data.local.db.BreedDao
 import com.sampleapps.catfacts.data.local.model.BreedDto
 import com.sampleapps.catfacts.data.remote.retrofit.Api
@@ -9,6 +14,7 @@ import com.sampleapps.catfacts.di.IoDispatcher
 import com.sampleapps.catfacts.domain.model.Breed
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -42,10 +48,12 @@ class BreedsRepository @Inject constructor(
         return getBreedsFlow(pager)
     }
 
-    suspend fun getBreedByName(name: String): Breed {
-        return withContext(defaultDispatcher) {
-            breedDao.findById(name).toBreed()
-        }
+    fun getBreedByName(name: String): Flow<Breed> {
+        return breedDao.findById(name)
+            .filterNotNull()
+            .map {
+                it.toBreed()
+            }
     }
 
     suspend fun setFavorite(breed: Breed, favorite: Boolean) {

@@ -12,6 +12,7 @@ import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.*
@@ -23,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
@@ -43,7 +45,8 @@ fun defaultTextFieldColors() = TextFieldDefaults.textFieldColors(
     //textColor = MaterialTheme.colorScheme.onSurfaceVariant,
     cursorColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = ContentAlpha.medium),
     focusedIndicatorColor = Color.Transparent,
-    unfocusedIndicatorColor = Color.Transparent)
+    unfocusedIndicatorColor = Color.Transparent
+)
 
 @Composable
 private fun BaseTitleContentProvider(
@@ -68,7 +71,8 @@ private fun BaseBackIcon(
 ) = IconButton(onClick = { onBackClick() }) {
     Icon(
         imageVector = Icons.Rounded.ArrowBack,
-        contentDescription = "Back")
+        contentDescription = "Back"
+    )
 }
 
 @Composable
@@ -105,7 +109,8 @@ fun DetailsAppBar(
         actions = {
             FavoriteButton(
                 checked = isFavoriteChecked ?: false,
-                onCheckedChange = onFavoriteClick)
+                onCheckedChange = onFavoriteClick
+            )
         }
     )
 }
@@ -114,9 +119,13 @@ fun DetailsAppBar(
 fun CatalogAppBar(
     title: String,
     colors: TopAppBarColors = defaultSmallTopAppBarColors(),
+    isListLayout: Boolean = true,
     onSearchClick: () -> Unit = {},
     onFavoritesClick: () -> Unit = {},
+    onLayoutTypeClick: (Boolean) -> Unit = {},
 ) {
+    val layoutIcon = if (isListLayout) R.drawable.ic_list_layout else R.drawable.ic_grid_layout
+
     SmallTopAppBar(
         title = { BaseTitleText(text = title) },
         colors = colors,
@@ -124,14 +133,26 @@ fun CatalogAppBar(
             IconButton(
                 onClick = onSearchClick
             ) {
-                Icon(imageVector = Icons.Rounded.Search,
-                    contentDescription = "Search")
+                Icon(
+                    imageVector = Icons.Rounded.Search,
+                    contentDescription = "Search"
+                )
             }
             IconButton(
                 onClick = onFavoritesClick
             ) {
-                Icon(imageVector = Icons.Default.FavoriteBorder,
-                    contentDescription = "Favorites")
+                Icon(
+                    imageVector = Icons.Default.FavoriteBorder,
+                    contentDescription = "Favorites"
+                )
+            }
+            IconButton(
+                onClick = { onLayoutTypeClick(isListLayout.not()) }
+            ) {
+                Icon(
+                    painterResource(id = layoutIcon),
+                    contentDescription = "LayoutType"
+                )
             }
         }
     )
@@ -198,7 +219,8 @@ fun SearchAppBar(
                 ) {
                     Icon(
                         imageVector = Icons.Default.Close,
-                        contentDescription = "Close")
+                        contentDescription = "Close"
+                    )
                 }
             }
         }

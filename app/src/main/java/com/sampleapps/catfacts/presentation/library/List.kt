@@ -2,9 +2,11 @@ package com.sampleapps.catfacts.presentation.library
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyGridScope
+import androidx.compose.foundation.lazy.grid.LazyGridState
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -19,38 +21,47 @@ import com.sampleapps.catfacts.presentation.state.LoadingView
 @Composable
 fun <T : Any> PagingList(
     modifier: Modifier = Modifier,
-    state: LazyListState,
+    state: LazyGridState,
     items: LazyPagingItems<T>,
-    itemContent: @Composable LazyListScope.(T, Int) -> Unit,
+    isListLayout: Boolean = true,
+    itemContent: @Composable LazyGridScope.(T, Int) -> Unit,
 ) {
-    LazyColumn(modifier = modifier,
+    val columnsCount = if (isListLayout) 1 else 3
+
+    LazyVerticalGrid(
+        modifier = modifier,
         state = state,
-        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        columns = GridCells.Fixed(columnsCount),
+        contentPadding = PaddingValues(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(items.itemCount) { index ->
             items[index]?.let {
-                this@LazyColumn.itemContent(it, index)
+                this@LazyVerticalGrid.itemContent(it, index)
             }
         }
         items.apply {
             when {
                 loadState.refresh is LoadState.Loading && items.itemCount <= 0 -> {
-                    item { LoadingView(modifier = Modifier.fillParentMaxSize()) }
+                    item { LoadingView(modifier = Modifier.fillMaxSize()) }
                 }
+
                 loadState.append is LoadState.Loading -> {
                     item { LoadingItem() }
                 }
+
                 loadState.refresh is LoadState.Error -> {
                     // todo: handle error with using text
                     val e = items.loadState.refresh as LoadState.Error
                     item {
                         ErrorView(
-                            modifier = Modifier.fillParentMaxSize(),
+                            modifier = Modifier.fillMaxSize(),
                             onClickRetry = { retry() }
                         )
                     }
                 }
+
                 loadState.append is LoadState.Error -> {
                     item {
                         ErrorItem(
@@ -58,10 +69,11 @@ fun <T : Any> PagingList(
                         )
                     }
                 }
+
                 loadState.append is LoadState.NotLoading &&
                         loadState.append.endOfPaginationReached &&
                         items.itemCount <= 0 -> {
-                    item { EmptyItemView(modifier = Modifier.fillParentMaxSize()) }
+                    item { EmptyItemView(modifier = Modifier.fillMaxSize()) }
                 }
             }
         }

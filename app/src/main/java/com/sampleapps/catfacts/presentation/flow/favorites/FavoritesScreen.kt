@@ -21,7 +21,7 @@ import com.sampleapps.catfacts.presentation.flow.destinations.CatDetailsScreenDe
 import com.sampleapps.catfacts.presentation.library.BackAppBar
 import com.sampleapps.catfacts.presentation.library.BreedCardItem
 import com.sampleapps.catfacts.presentation.library.PagingList
-import com.sampleapps.catfacts.presentation.util.rememberLazyListState
+import com.sampleapps.catfacts.presentation.util.rememberLazyGridState
 import com.sampleapps.catfacts.presentation.util.setSystemBarsColor
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -45,11 +45,13 @@ fun FavoritesScreen(
         },
         content = { paddings ->
             val items = favoritesViewModel.favoriteBreedsFlow.collectAsLazyPagingItems()
-            val listState = items.rememberLazyListState()
-            Column(modifier = Modifier
-                .fillMaxSize()
-                .padding(paddings)
-                .background(MaterialTheme.colorScheme.background)) {
+            val listState = items.rememberLazyGridState()
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddings)
+                    .background(MaterialTheme.colorScheme.background)
+            ) {
                 PagingList(
                     modifier = Modifier.fillMaxSize(),
                     state = listState,

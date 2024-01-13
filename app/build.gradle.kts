@@ -1,10 +1,11 @@
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt.gradle)
-    kotlin("plugin.serialization").version(libs.versions.kotlin).apply(false)
+    kotlin("plugin.serialization")
 }
 
 android {
@@ -73,8 +74,6 @@ dependencies {
     implementation(libs.compose.ui.tooling.preview)
     debugImplementation(libs.compose.ui.tooling)
     implementation(libs.activity.compose)
-    //implementation "androidx.compose.compiler:compiler:$compose_compiler_version"
-    implementation(libs.compose.runtime.livedata)
 
     // Paging Compose
     implementation(libs.paging.compose)
@@ -93,11 +92,10 @@ dependencies {
     // Json Serialization
     implementation(libs.kotlinx.serialization.json)
 
-    // ViewModel and LiveData
+    // ViewModel
     implementation(libs.lifecycle.extensions)
     implementation(libs.lifecycle.viewmodel.ktx)
     implementation(libs.lifecycle.runtime.ktx)
-    implementation(libs.lifecycle.livedata.ktx)
 
     // Hilt
     implementation(libs.hilt.android)
@@ -106,9 +104,6 @@ dependencies {
 
     // Image Loading
     implementation(libs.coil.compose)
-
-    // Security
-    //implementation "androidx.security:security-crypto:1.0.0"
 
     // Room
     implementation(libs.bundles.room)

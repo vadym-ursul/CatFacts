@@ -7,16 +7,16 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class OnboardRepository @Inject constructor(
+class CatalogRepository @Inject constructor(
     private val storage: Storage,
     @IoDispatcher private val defaultDispatcher: CoroutineDispatcher
 ) {
 
-    suspend fun setOnboardingPassed(passed: Boolean) {
+    suspend fun setListLayout(isListLayout: Boolean) {
         withContext(defaultDispatcher) {
-            storage.saveOnboardingPassed(passed)
+            storage.saveListLayout(isListLayout)
         }
     }
 
-    val isOnBoardPassed: Flow<Boolean> = storage.isOnBoardPassed
+    val isListLayout: Flow<Boolean> = storage.isListLayout
 }

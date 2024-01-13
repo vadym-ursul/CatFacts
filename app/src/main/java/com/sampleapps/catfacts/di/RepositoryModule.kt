@@ -4,6 +4,7 @@ import com.sampleapps.catfacts.data.local.Storage
 import com.sampleapps.catfacts.data.local.db.BreedDao
 import com.sampleapps.catfacts.data.remote.retrofit.Api
 import com.sampleapps.catfacts.data.repository.BreedsRepository
+import com.sampleapps.catfacts.data.repository.CatalogRepository
 import com.sampleapps.catfacts.data.repository.OnboardRepository
 import com.sampleapps.catfacts.data.repository.paged.BreedsMediator
 import dagger.Module
@@ -32,5 +33,13 @@ class RepositoryModule {
         @IoDispatcher defaultDispatcher: CoroutineDispatcher
     ): OnboardRepository {
         return OnboardRepository(storage, defaultDispatcher)
+    }
+
+    @Provides
+    fun provideCatalogRepository(
+        storage: Storage,
+        @IoDispatcher defaultDispatcher: CoroutineDispatcher
+    ): CatalogRepository {
+        return CatalogRepository(storage, defaultDispatcher)
     }
 }

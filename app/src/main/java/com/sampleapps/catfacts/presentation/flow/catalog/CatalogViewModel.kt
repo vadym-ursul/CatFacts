@@ -1,30 +1,48 @@
 package com.sampleapps.catfacts.presentation.flow.catalog
 
-import androidx.lifecycle.*
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import com.sampleapps.catfacts.data.repository.BreedsRepository
+import com.sampleapps.catfacts.data.repository.CatalogRepository
 import com.sampleapps.catfacts.domain.model.Breed
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CatalogViewModel @Inject constructor(
     private val breedsRepository: BreedsRepository,
+    private val catalogRepository: CatalogRepository
 ) : ViewModel() {
 
-    private val _showSearchBarLiveData = MutableLiveData(false)
-    val showSearchBarLiveData: LiveData<Boolean> = _showSearchBarLiveData
+    private val _showSearchBar = MutableStateFlow(false)
+    val showSearchBar: StateFlow<Boolean> = _showSearchBar.asStateFlow()
+    private val _showFavorites = MutableStateFlow(false)
+    val showFavorites: StateFlow<Boolean> = _showFavorites.asStateFlow()
 
-    private val _searchTextLiveData = MutableLiveData<String>()
-    val searchTextLiveData: LiveData<String> = _searchTextLiveData
-    private val _searchActionLiveData = MutableLiveData("")
+    private val _searchText = MutableStateFlow(String())
+    val searchText: StateFlow<String> = _searchText
+    private val _searchAction = MutableStateFlow(String())
+
+    val isListLayoutFlow: StateFlow<Boolean> =
+        catalogRepository.isListLayout
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5_000),
+                initialValue = true
+            )
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val breedsFlow: Flow<PagingData<Breed>> = _searchActionLiveData.asFlow()
+    val breedsFlow: Flow<PagingData<Breed>> = _searchAction
         .flatMapLatest {
             if (it.isEmpty())
                 breedsRepository.getBreeds()
@@ -32,14 +50,16 @@ class CatalogViewModel @Inject constructor(
                 breedsRepository.filterBreeds(it)
         }
 
+    val favoriteBreedsFlow: Flow<PagingData<Breed>> = breedsRepository.getFavoriteBreeds()
+
     fun searchTextUpdated(text: String) {
-        _searchTextLiveData.value = text
+        _searchText.value = text
         search()
     }
 
     fun search() {
-        val text: String = searchTextLiveData.value ?: ""
-        _searchActionLiveData.value = text
+        val text: String = searchText.value
+        _searchAction.value = text
     }
 
     fun onFavoriteClick(breed: Breed, favorite: Boolean) {
@@ -48,11 +68,25 @@ class CatalogViewModel @Inject constructor(
         }
     }
 
+    fun onLayoutTypeClick(isListLayout: Boolean) {
+        viewModelScope.launch {
+            catalogRepository.setListLayout(isListLayout)
+        }
+    }
+
     fun showSearchBar() {
-        _showSearchBarLiveData.value = true
+        _showSearchBar.value = true
     }
 
     fun hideSearchBar() {
-        _showSearchBarLiveData.value = false
+        _showSearchBar.value = false
+    }
+
+    fun showFavorites() {
+        _showFavorites.value = true
+    }
+
+    fun hideFavorites() {
+        _showFavorites.value = false
     }
 }

@@ -1,12 +1,12 @@
 package com.sampleapps.catfacts.di
 
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.sampleapps.catfacts.BuildConfig
 import com.sampleapps.catfacts.data.remote.CATFACT_NINJA_URL
 import com.sampleapps.catfacts.data.remote.TIMEOUT
 import com.sampleapps.catfacts.data.remote.retrofit.Api
 import com.sampleapps.catfacts.data.remote.retrofit.adapter.ApiResponseAdapterFactory
 import com.sampleapps.catfacts.data.remote.retrofit.interceptor.CurlLoggingInterceptor
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,6 +15,7 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.CallAdapter
 import retrofit2.Converter
 import retrofit2.Retrofit
@@ -54,6 +55,10 @@ class NetworkModule {
             }
             if (BuildConfig.DEBUG) {
                 addInterceptor(curlLoggingInterceptor)
+                val interceptor = HttpLoggingInterceptor().apply {
+                    level = HttpLoggingInterceptor.Level.BODY
+                }
+                addInterceptor(interceptor)
             }
         }.build()
     }

@@ -74,6 +74,7 @@ fun BreedCardItem(
     modifier: Modifier = Modifier,
     breed: Breed,
     isFavoriteVisible: Boolean = true,
+    isBreedNameVisible: Boolean = true,
     onItemClick: (Breed) -> Unit = {},
     onFavoriteClick: (Breed, Boolean) -> Unit = { _, _ -> },
 ) {
@@ -113,20 +114,23 @@ fun BreedCardItem(
                 }
             }
 
-            Surface(
-                modifier = Modifier
-                    .align(Alignment.BottomStart)
-                    .padding(16.dp),
-                shape = shape,
-                shadowElevation = 4.dp
-            ) {
-                Text(
-                    modifier = Modifier.padding(PADDING_10),
-                    text = breed.title,
-                    maxLines = 2,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    style = MaterialTheme.typography.labelMedium,
-                    overflow = TextOverflow.Ellipsis)
+            if (isBreedNameVisible) {
+                Surface(
+                    modifier = Modifier
+                        .align(Alignment.BottomStart)
+                        .padding(16.dp),
+                    shape = shape,
+                    shadowElevation = 4.dp
+                ) {
+                    Text(
+                        modifier = Modifier.padding(PADDING_10),
+                        text = breed.title,
+                        maxLines = 2,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        style = MaterialTheme.typography.labelMedium,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
             }
         }
     }

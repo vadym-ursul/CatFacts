@@ -9,7 +9,6 @@ https://madscorecard.withgoogle.com/scorecards/74776971/#summary
 - [Coroutines](https://kotlinlang.org/docs/reference/coroutines-overview.html)
 - [Compose](https://developer.android.com/jetpack/compose)
 - [Android Architecture Components](https://developer.android.com/topic/libraries/architecture)
-    - [LiveData](https://developer.android.com/topic/libraries/architecture/livedata)
     - [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel)
 - [Room](https://developer.android.com/training/data-storage/room)
 - [Hilt](https://dagger.dev/hilt/)

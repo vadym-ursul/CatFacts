@@ -3,6 +3,7 @@ package com.sampleapps.catfacts.data.local.db
 import androidx.paging.PagingSource
 import androidx.room.*
 import com.sampleapps.catfacts.data.local.model.BreedDto
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface BreedDao {
@@ -20,7 +21,7 @@ interface BreedDao {
     fun findByFavorite(favorite: Boolean = true): PagingSource<Int, BreedDto>
 
     @Query("SELECT * FROM breeds WHERE id=:id")
-    suspend fun findById(id: String): BreedDto
+    fun findById(id: String): Flow<BreedDto>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addBreeds(breeds: List<BreedDto>)

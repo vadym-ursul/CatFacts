@@ -1,7 +1,14 @@
 package com.sampleapps.catfacts.presentation.flow.onboarding
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
@@ -16,15 +23,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.HorizontalPagerIndicator
+import com.google.accompanist.pager.PagerState
+import com.google.accompanist.pager.rememberPagerState
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sampleapps.catfacts.R
 import com.sampleapps.catfacts.presentation.flow.destinations.CatalogScreenDestination
 import com.sampleapps.catfacts.presentation.theme.PADDING_20
 import com.sampleapps.catfacts.presentation.theme.PADDING_40
-import com.google.accompanist.pager.*
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
-@OptIn(ExperimentalPagerApi::class)
 @Destination
 @Composable
 fun OnBoardingScreen(
@@ -38,7 +47,11 @@ fun OnBoardingScreen(
     val pagerState = rememberPagerState()
     val onBoardingViewModel = hiltViewModel<OnBoardingViewModel>()
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .navigationBarsPadding()
+    ) {
         HorizontalPager(
             modifier = Modifier.weight(10f),
             count = 3,
@@ -100,7 +113,6 @@ fun PagerScreen(onBoardingPage: OnBoardingPage) {
     }
 }
 
-@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun FinishButton(
     modifier: Modifier,
